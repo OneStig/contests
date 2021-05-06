@@ -60,5 +60,5 @@ int main()
             ans += counts[odd.back()];
         }
     }
-    cout << ans << "\n";
+    cout << ans << endl;
 }
