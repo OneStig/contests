@@ -71,7 +71,7 @@ void upd(int k, int x) {
     segtree[k] = x;
 
     for (k /= 2; k >= 1; k /= 2) {
-        segtree[k] = segtree[2 * k] + segtree[2 * k + 1];
+        segtree[k] = min(segtree[2 * k], segtree[2 * k + 1]);
     }
 }
 
@@ -139,34 +139,35 @@ int main() {
 
     segtree.resize(2 * n, 0);
 
-    vector<endp> endpoints;
+    // vector<endp> endpoints;
 
+    vector<pair<int, int>> endpoints(n, {-1, -1});
 
     for (int i = 0; i < n; i++) {
         upd(i, colors[i]);
 
         if (avail[colors[i]] != -1 && treemin(avail[colors[i]], i) >= colors[i]) {
-            endp l;
-            l.lr = false;
-            l.x = avail[colors[i]];
-            l.ind = i;
+            //endp l;
+            //l.lr = false;
+            //l.x = avail[colors[i]];
+            //l.ind = i;
 
-            endp r;
-            r.lr = true;
-            r.x = i;
-            r.ind = avail[colors[i]];
+            //endp r;
+            //r.lr = true;
+            //r.x = i;
+            //r.ind = ;
 
-            endpoints.push_back(l);
-            endpoints.push_back(r);
+            endpoints[i].first = avail[colors[i]];
+            endpoints[avail[colors[i]]].second = i;
         }
 
         avail[colors[i]] = i;
     }
 
-    sort(endpoints.begin(), endpoints.end(), [](endp a, endp b) { return a.x < b.x; });
+    // sort(endpoints.begin(), endpoints.end(), [](endp a, endp b) { return a.x < b.x; });
 
-    vector<int> openv(endpoints.size());
-    vector<int> closev(endpoints.size());
+    vector<int> openv(n);
+    vector<int> closev(n);
 
     int closedcount = 0;
     int opencount = 0;
@@ -175,24 +176,33 @@ int main() {
 
     int qind = 0;
 
-    for (int i = 0; i < endpoints.size(); i++) {
-        if (!endpoints[i].lr) {
-            opencount++;
-
-            fupd(endpoints[i].ind, 1);
-        }
-        else {
+    for (int i = 0; i < n; i++) {
+        if (endpoints[i].first != -1) {
             closedcount++;
 
-            fupd(endpoints[i].x, 0);
+            fupd(endpoints[i].first, 0);
+        }
+
+        if (endpoints[i].second != -1) {
+            opencount++;
+
+            fupd(i, 1);
         }
 
         openv[i] = opencount;
         closev[i] = closedcount;
 
-
         while (qind < queries.size() && queries[qind].r == i) {
-            int lsum = openv[i] - openv[queries[qind].l] - fsum(queries[qind].l, i);
+
+            int lsum;
+            
+            if (queries[qind].l == 0) {
+                lsum = openv[i] - fsum(queries[qind].l, i);
+            }
+            else {
+                lsum = openv[i] - openv[queries[qind].l - 1] - fsum(queries[qind].l, i);
+            }
+ 
             queries[qind].sol = i - queries[qind].l + 1 - lsum;
 
             // - (closev[i] - closev[queries[qind].l]
@@ -201,6 +211,33 @@ int main() {
             qind++;
         }
     }
+
+    //for (int i = 0; i < endpoints.size(); i++) {
+    //    if (!endpoints[i].lr) { // left
+    //        opencount++;
+
+    //        fupd(endpoints[i].x, 1);
+    //    }
+    //    else {
+    //        closedcount++;
+
+    //        fupd(endpoints[i].ind, 0);
+    //    }
+
+    //    openv[i] = opencount;
+    //    closev[i] = closedcount;
+
+
+    //    while (qind < queries.size() && queries[qind].r == i) {
+    //        int lsum = openv[i] - openv[queries[qind].l] - fsum(queries[qind].l, i);
+    //        queries[qind].sol = i - queries[qind].l + 1 - lsum;
+
+    //        // - (closev[i] - closev[queries[qind].l]
+    //        // - (openv[i] - openv[queries[qind].l])
+    //        // + fsum(queries[qind].l, i));
+    //        qind++;
+    //    }
+    //}
 
     sort(queries.begin(), queries.end(), [](qr a, qr b) { return a.pos < b.pos; });
 
