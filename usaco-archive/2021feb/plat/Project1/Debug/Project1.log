@@ -1,5 +1,2 @@
-﻿  ModernArt.cpp
-Source.obj : error LNK2005: _main already defined in ModernArt.obj
-Source.obj : error LNK2005: "class std::basic_ifstream<char,struct std::char_traits<char> > fin" (?fin@@3V?$basic_ifstream@DU?$char_traits@D@std@@@std@@A) already defined in ModernArt.obj
-Source.obj : error LNK2005: "class std::basic_ofstream<char,struct std::char_traits<char> > fout" (?fout@@3V?$basic_ofstream@DU?$char_traits@D@std@@@std@@A) already defined in ModernArt.obj
-C:\Users\there\Documents\GitHub\cp-prac\usaco-archive\2021feb\plat\Project1\Debug\Project1.exe : fatal error LNK1169: one or more multiply defined symbols found
+﻿  Source.cpp
+  Project1.vcxproj -> C:\Users\there\Documents\GitHub\cp-prac\usaco-archive\2021feb\plat\Project1\Debug\Project1.exe
