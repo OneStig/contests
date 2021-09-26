@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <climits>
 #include <set>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,84 +16,73 @@ ofstream fout("test.out");
 #define fout fout
 #endif
 
-set<int> nobles[200001];
+vector<int> orig;
+
+void recur(vector<int>& sums) {
+    int x = sums[sums.size() - 1] - sums[sums.size() - 2];
+
+    vector<bool> flag(sums.size());
+
+    vector<int> p1, p2;
+
+    bool catchX = 0;
+
+    int j = sums.size() - 2;
+
+    int sdf = 0;
+
+    for (int i : sums) {
+        if (i == x) {
+            sdf = 1;
+            break;
+        }
+    }
+
+    for (int i = sums.size() - 1; i > 0; i--) {
+
+        if (!flag[i]) {
+
+            p1.push_back(sums[i]);
+
+            j = min(i - 1, j);
+
+            while (j >= 0 && sums[i] - x != sums[j]) {
+                j--;
+            }
+
+            flag[j] = 1;
+
+            p2.push_back(sums[j]);
+
+        }
+    }
+
+    if (sdf) {
+        sums = p2;
+    }
+    else {
+        x *= -1;
+        sums = p1;
+    }
+
+    reverse(sums.begin(), sums.end());
+
+    orig.push_back(x);
+}
+
+vector<int> recoverArray(int n, vector<int>& sums) {
+    sort(sums.begin(), sums.end());
+
+    for (int i = 0; i < n; i++) {
+        recur(sums);
+    }
+
+    return orig;
+}
+
 
 int main()
 {
-    int n, m;
-    fin >> n >> m;
-
-    int bigbois = 0;
-
-    for (int i = 0; i < m; i++) {
-        int u, v;
-        fin >> u >> v;
-        nobles[u].insert(v);
-        nobles[v].insert(u);
-
-    }
-
-    for (int i = 1; i <= n; i++) {
-        if (nobles[i].empty()) {
-            bigbois++;
-
-        }
-        else if (*nobles[i].rbegin() < i) {
-            // cout << i << " " << *(nobles[i].rbegin()) << endl;
-            bigbois++;
-        }
-    }
-
-    int q;
-    fin >> q;
-
-    while (q--) {
-        int t, u, v;
-        fin >> t;
-
-        if (t == 1) {
-            fin >> u >> v;
-
-            bool un = 0, vn = 0;
-
-            if (nobles[u].empty() || *nobles[u].rbegin() < u) {
-                un = 1;
-            }
-
-            if (nobles[v].empty() || *nobles[v].rbegin() < v) {
-                vn = 1;
-            }
-
-            nobles[u].insert(v);
-            nobles[v].insert(u);
-
-            if (un == 1 && *nobles[u].rbegin() >= u) {
-                bigbois--;
-            }
-
-            if (vn == 1 && *nobles[v].rbegin() >= v) {
-                bigbois--;
-            }
-        }
-        else if (t == 2) {
-            fin >> u >> v;
-
-            bool un = *nobles[u].rbegin() < u, vn = *nobles[v].rbegin() < v;
-
-
-            nobles[u].erase(v);
-            nobles[v].erase(u);
-
-            if (un == 0 && (nobles[u].empty() || *nobles[u].rbegin() < u)) {
-                bigbois++;
-            }
-
-            if (vn == 0 && (nobles[v].empty() || *nobles[v].rbegin() < v)) {
-                bigbois++;
-            }
-        }
-        else if (t == 3) {
-            fout << bigbois << endl;
-        }
-    }
+    vector<int> in = { 0, -3 };
+    vector<int> out = recoverArray(1, in);
 }
