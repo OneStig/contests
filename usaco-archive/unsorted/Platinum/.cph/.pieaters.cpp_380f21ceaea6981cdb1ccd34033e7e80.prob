@@ -1,1 +1,0 @@
-{"name":"Local: pieaters","url":"c:\\Users\\there\\Documents\\GitHub\\usaco\\2019Dec\\Platinum\\pieaters.cpp","tests":[{"id":1611020135956,"input":"2 2\n100 1 2\n100 1 1","output":"200"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\there\\Documents\\GitHub\\usaco\\2019Dec\\Platinum\\pieaters.cpp","group":"local","local":true}
