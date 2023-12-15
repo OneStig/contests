@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+	int t;
+	cin >> t;
+
+	while (t--) {
+		int n;
+		cin >> n;
+
+		vector<pair<long long, int>> a(n);
+		vector<long long> sums(n);
+
+		for (int i = 0; i < n; i++) {
+			long long tmp;
+			cin >> tmp;
+			a[i] = {tmp, i};
+		}
+
+		sort(a.begin(), a.end());
+	}
+}
