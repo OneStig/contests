@@ -4,18 +4,22 @@
 #include <bits/debug.h>
 #endif
 
+#define ll long long
+
 using namespace std;
 
 int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int n;
 	cin >> n;
-
 	vector<int> a(n);
 
-	int mx = INT_MIN;
+	ll mx = INT_MIN;
 	for (int& i : a) {
 		cin >> i;
-		mx = max(mx, i);
+		mx = max(mx, (ll)i);
 	}
 
 	int s, t;
@@ -33,12 +37,14 @@ int main() {
 	isprime[1] = 0;
 	vector<int> primes;
 
-	for (int i = 1; i <= mx; i++) {
+	for (ll i = 2; i <= mx; i++) {
 		if (isprime[i]) {
 			primes.push_back(i);
 
-			for (int j = i * i; j <= mx; j += i) {
-				isprime[j] = 0;
+			if (i * i <= mx) {
+				for (ll j = i * i; j <= mx; j += i) {
+					isprime[j] = 0;
+				}
 			}
 		}
 	}
@@ -56,6 +62,14 @@ int main() {
 				break;
 			}
 
+			if (isprime[cur]) {
+				int pos = lower_bound(primes.begin(), primes.end(), cur) - primes.begin();
+				adj[i].push_back(pos);
+				padj[pos].push_back(i);
+
+				break;
+			}
+
 			if (cur % primes[j] == 0) {
 				adj[i].push_back(j);
 				padj[j].push_back(i);
@@ -69,7 +83,6 @@ int main() {
 
 	queue<array<int, 2>> bfs;
 	bfs.push({t, 1});
-	prev[t] = -2;
 
 	while (!bfs.empty()) {
 		auto cur = bfs.front();
@@ -97,24 +110,24 @@ int main() {
 		}
 	}
 
-	if (prev[1] == -1) {
+	if (prev[s] == -1) {
 		cout << -1 << endl;
 	}
 	else {
 		vector<int> ans;
 
-		ans.push_back(s);
-
-		while (prev[s] != -2) {
-			s = prev[s];
+		while (s != t) {
 			ans.push_back(s);
+			s = prev[s];
 		}
 
-		cout << ans.size() << endl;
+		ans.push_back(t);
+
+		cout << ans.size() << '\n';
 		for (auto sp : ans) {
 			cout << sp + 1 << " ";
 		}
 
-		cout << endl;
+		cout << '\n';
 	}
 }
