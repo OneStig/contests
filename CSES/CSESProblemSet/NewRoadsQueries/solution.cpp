@@ -4,7 +4,6 @@ using namespace std;
 
 struct DSU {
 	vector<int> e;
-	//DSU(int N) { e = vector<int>(N, -1); }
 
 	void init(int N) {
 		e = vector<int>(N, -1);
@@ -30,25 +29,16 @@ int main() {
 	int n, m, q;
 	cin >> n >> m >> q;
 	
-	vector<DSU> time(m + 1);
-	time[0].init(n);
+	DSU cities;
+	cities.init(n);
 
-	for (int i = 1; i <= m; i++) {
+	int ans = -1;
+
+	for (int i = 1; i <= n; i++) {
 		int a, b;
 		cin >> a >> b;
-		a--; b--;
 
-		time[i] = time[i - 1];
-		time[i].unite(a, b);
-	}
-
-	while (q--) {
-		int a, b;
-		cin >> a >> b;
-		a--; b--;
-
-		if (!time[m].same_set(a, b)) {
-			cout << -1 << endl;
+		if (ans == -1) {
 			continue;
 		}
 

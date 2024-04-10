@@ -6,32 +6,43 @@ int main() {
 	int v;
 	cin >> v;
 
-	vector<int> a(10);
+	vector<int> dig(10);
 
-	int digits = 0;
-	int biggest = 0;
+	int mindig = INT_MAX;
+	int which = 0;
 
 	for (int i = 1; i <= 9; i++) {
-		cin >> a[i];
-		
-		if (v / a[i] >= digits) {
-			if (v / a[i] == digits) {
-				biggest = max(biggest, i);
-			}
-			else {
-				biggest = i;
-			}
+		cin >> dig[i];
 
-			digits = v / a[i];
+		if (dig[i] < mindig) {
+			mindig = dig[i];
+			which = i;
 		}
 	}
 
-	if (digits == 0) {
-		cout << -1 << endl;
+	int total = v / mindig;
+
+	if (total == 0) {
+		cout << "-1\n";
 		return 0;
 	}
 
+	v -= total * mindig;
 
-	cout << endl;
+	for (int i = 1; i <= 9; i++) {
+		dig[i] -= mindig;
+	}
+
+	for (int i = 0; i < total; i++) {
+		for (int d = 9; d >= 1; d--) {
+			if (v >= dig[d]) {
+				cout << d;
+				v -= dig[d];
+				break;
+			}
+		}
+	}
+
+	cout << "\n";
 }
 

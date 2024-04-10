@@ -1,0 +1,5 @@
+/Users/steven/bin/cph: line 65: 17456 Segmentation fault: 11  ./cpp.out < "input${TEST_NUM}" > "my_output${TEST_NUM}"
+
+real	0m0.063s
+user	0m0.001s
+sys	0m0.001s
