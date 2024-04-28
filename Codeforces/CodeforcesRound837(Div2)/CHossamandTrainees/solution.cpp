@@ -8,7 +8,6 @@ int main() {
 	int t;
 	cin >> t;
 
-
 	vector<int> primes;
 	vector<bool> isprime(MX_N + 1, 1);
 	isprime[0] = 0, isprime[1] = 0;
@@ -27,57 +26,50 @@ int main() {
 		}
 	}
 
-	auto factors = [&primes](set<int>& seen, int x) {
-		int ox = x;
-		for (int p : primes) {
-			if (x == 1 || p > sqrt(ox)) {
-				break;
-			}
-
-			if (x % p == 0) {
-				if (seen.find(p) != seen.end()) {
-					return true;
-				}
-
-				if (seen.find(x / p) != seen.end()) {
-					return true;
-				}
-
-				seen.insert(p);
-				seen.insert(x / p);
-
-				x /= p;
-			}
-		}
-
-		return false;
-	};
-
 	while (t--) {
 		int n;
 		cin >> n;
 
-		vector<int> a(n);
-
-		set<int> hit;
+		unordered_set<int> factors;
+		int a;
 		bool yes = 0;
 
-		for (int i = 0; i < n; i++) {
-			cin >> a[i];
+		while (n--) {
+			cin >> a;
 
-			if (yes) {
-				continue;
+			if (!yes) {
+				for (int i = 0; i < primes.size(); i++) {
+					if (a == 1) {
+						break;
+					}
+
+					if (a % primes[i] == 0) {
+						if (factors.find(primes[i]) != factors.end()) {
+							yes = 1;
+							break;
+						}
+						factors.insert(primes[i]);
+
+						while (a % primes[i] == 0) {
+							a /= primes[i];
+						}
+					}
+				}
+
+				if (a != 1) {
+					if (factors.find(a) != factors.end()) {
+						yes = 1;
+					}
+					else {
+						factors.insert(a);
+					}
+				}
 			}
-
-			if (hit.find(a[i]) != hit.end()) {
-				yes = 1;
-			}
-
-			hit.insert(a[i]);
-
-			yes = yes || factors(hit, a[i]);
 		}
 
-		cout << (yes ? "YES" : "NO") << endl;
+		cout << (yes ? "YES" : "NO") << '\n';
+		// 402122038 603183057
+		// 2, 201061019
+		// 3, 201061019
 	}
 }
