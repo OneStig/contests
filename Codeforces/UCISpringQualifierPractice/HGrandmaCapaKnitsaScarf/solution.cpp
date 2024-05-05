@@ -25,45 +25,43 @@ int main() {
     cin >> t;
 
     while (t--) {
-        ll n, k;
-        cin >> n >> k;
+        int n;
+        string s;
+        cin >> n >> s;
 
-        vector<ll> a(n);
+        int ans = INT_MAX;
 
-        for (ll& x : a) {
-            cin >> x;
-        }
+        for (char c = 'a'; c <= 'z'; c++) {
+            int l = 0, r = s.size() - 1;
 
-        sort(a.rbegin(), a.rend());
-
-        ll sm = a[n - 1];
-        a.pop_back();
-
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
-            ans++;
-            a.pop_back();
-        }
-
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
+            int bad = 0;
+            bool fail = 0;
+            while (l < r) {
+                if (s[l] == s[r]) {
+                    l++;
+                    r--;
+                }
+                else {
+                    if (s[l] == c) {
+                        l++;
+                        bad++;
+                    }
+                    else if (s[r] == c) {
+                        r--;
+                        bad++;
+                    }
+                    else {
+                        fail = 1;
+                        break;
+                    }
+                }
             }
 
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
+            if (!fail) {
+                ans = min(ans, bad);
             }
         }
 
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
+        cout << (ans == INT_MAX ? -1 : ans) << '\n';
     }
 }

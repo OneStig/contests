@@ -25,45 +25,46 @@ int main() {
     cin >> t;
 
     while (t--) {
-        ll n, k;
-        cin >> n >> k;
+        int n;
+        cin >> n;
+        
+        priority_queue<array<int, 2>> pq;
 
-        vector<ll> a(n);
+        for (int i = 0; i < n; i++) {
+            int a;
+            cin >> a;
 
-        for (ll& x : a) {
-            cin >> x;
-        }
-
-        sort(a.rbegin(), a.rend());
-
-        ll sm = a[n - 1];
-        a.pop_back();
-
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
-            ans++;
-            a.pop_back();
-        }
-
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
-            }
-
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
+            if (a) {
+                pq.push({a, i + 1});
             }
         }
 
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
+        vector<array<int, 2>> ppl;
+
+        while (pq.size() >= 2) {
+            auto f = pq.top();
+            pq.pop();
+            auto s = pq.top();
+            pq.pop();
+
+            ppl.push_back({f[1], s[1]});
+
+            f[0]--;
+            s[0]--;
+
+            if (f[0]) {
+                pq.push(f);
+            }
+
+            if (s[0]) {
+                pq.push(s);
+            }
+        }
+
+        cout << ppl.size() << '\n';
+
+        for (auto psn : ppl) {
+            cout << psn[0] << ' ' << psn[1] << '\n';
+        }
     }
 }

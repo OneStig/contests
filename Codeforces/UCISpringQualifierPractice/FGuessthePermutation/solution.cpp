@@ -14,56 +14,58 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #endif
 
 #define ll long long
+typedef int uci;
+#define int long long
 #define ld long double
-#define szof(x) ((int)x.size())
+#define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int main() {
+uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
     int t;
     cin >> t;
 
     while (t--) {
-        ll n, k;
-        cin >> n >> k;
+        int n;
+        cin >> n;
 
-        vector<ll> a(n);
+        cout << "? 1 " << n << endl;
+        int total;
+        cin >> total;
 
-        for (ll& x : a) {
-            cin >> x;
-        }
+        int l = 1, r = n;
+        while (l < r) {
+            int mid = (l + r + 1) / 2;
+            dbg(l, r, mid);
 
-        sort(a.rbegin(), a.rend());
+            cout << "? 1 " << mid << endl;
+            int cur;
+            cin >> cur;
 
-        ll sm = a[n - 1];
-        a.pop_back();
-
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
-            ans++;
-            a.pop_back();
-        }
-
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
+            if (cur == 0) {
+                l = mid;
             }
-
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
+            else {
+                r = mid - 1;
             }
         }
 
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
+        int i = l;
+
+        cout << "? " << i + 1 << " " << n << endl;
+        int fseg;
+        cin >> fseg;
+
+        int j = i + total - fseg + 1;
+
+        cout << "? " << j << " " << n << endl;
+        int remainder;
+        cin >> remainder;
+
+        int flength = (1 + (ll)sqrt(1 + 8 * remainder)) / 2;
+        int k = j + flength - 1;
+
+        cout << "! " << i << " " << j << " " << k << endl;
     }
 }

@@ -25,45 +25,42 @@ int main() {
     cin >> t;
 
     while (t--) {
-        ll n, k;
-        cin >> n >> k;
+        string s;
+        cin >> s;
 
-        vector<ll> a(n);
+        int a{}, b{};
 
-        for (ll& x : a) {
-            cin >> x;
-        }
-
-        sort(a.rbegin(), a.rend());
-
-        ll sm = a[n - 1];
-        a.pop_back();
-
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
-            ans++;
-            a.pop_back();
-        }
-
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
+        vector<int> as;
+        int astreak{};
+        bool doubleb = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == 'A') {
+                a++;
+                astreak++;
             }
+            else {
+                as.push_back(astreak);
+                astreak = 0;
+                b++;
 
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
+                if (i != 0 && s[i - 1] == 'B') {
+                    doubleb = 1;
+                }
             }
         }
+        as.push_back(astreak);
 
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
+        if (b == 0) {
+            cout << 0 << '\n';
+            continue;
+        }
+
+        if (s[0] == 'B' || s[s.size() - 1] == 'B' || doubleb) {
+            cout << a << '\n';
+        }
+        else {
+            cout << a - *min_element(all(as)) << '\n';
+            dbg(s);
+        }
     }
 }

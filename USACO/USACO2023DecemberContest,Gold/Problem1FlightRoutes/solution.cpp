@@ -21,49 +21,36 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
 
-    while (t--) {
-        ll n, k;
-        cin >> n >> k;
+    vector<vector<bool>> routes(n, vector<bool>(n));
 
-        vector<ll> a(n);
+    for (int i = 0; i < n - 1; i++) {
+        string s;
+        cin >> s;
 
-        for (ll& x : a) {
-            cin >> x;
+        for (int j = i + 1; j < n; j++) {
+            routes[i][j] = s[j - i - 1] == '1';
         }
-
-        sort(a.rbegin(), a.rend());
-
-        ll sm = a[n - 1];
-        a.pop_back();
-
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
-            ans++;
-            a.pop_back();
-        }
-
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
-            }
-
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
-            }
-        }
-
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
     }
+
+    int ans = 0;
+    vector<vector<bool>> direct(n, vector<bool>(n));
+
+    for (int i = n - 2; i >= 0; i--) {
+        for (int j = n + 1; j < n; j++) {
+            for (int x = i; x < j; x++) {
+                direct[i][j] = direct[i][j] ^ (routes[i][x] & direct[x][j]);
+            }
+            direct[i][j] = direct[i][j] ^ routes[i][j];
+
+            ans += direct[i][j];
+        }
+        dbg(i);
+    }
+
+    dbg(direct);
+
+    cout << ans << '\n';
 }

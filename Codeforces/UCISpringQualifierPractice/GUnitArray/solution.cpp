@@ -20,50 +20,33 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
     int t;
     cin >> t;
 
     while (t--) {
-        ll n, k;
-        cin >> n >> k;
+        int n;
+        cin >> n;
 
-        vector<ll> a(n);
+        int ne{};
 
-        for (ll& x : a) {
-            cin >> x;
+        for (int i = 0; i < n; i++) {
+            int a;
+            cin >> a;
+
+            ne += a == -1;
         }
 
-        sort(a.rbegin(), a.rend());
+        int ans = 0;
 
-        ll sm = a[n - 1];
-        a.pop_back();
+        if (ne > n / 2) {
+            ans += ne - n / 2;
+            ne = n / 2;
+        }
 
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
+        if (ne % 2) {
             ans++;
-            a.pop_back();
         }
 
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
-            }
-
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
-            }
-        }
-
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
+        cout << ans << '\n';
     }
 }

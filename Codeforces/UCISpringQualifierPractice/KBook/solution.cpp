@@ -18,6 +18,7 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define szof(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -25,45 +26,55 @@ int main() {
     cin >> t;
 
     while (t--) {
-        ll n, k;
-        cin >> n >> k;
+        int n;
+        cin >> n;
 
-        vector<ll> a(n);
+        vector<int> pages(n + 1, 1);
+        vector<vector<int>> adj(n + 1);
+        vector<int> deg(n + 1);
 
-        for (ll& x : a) {
-            cin >> x;
-        }
+        for (int i = 1; i <= n; i++) {
+            int k;
+            cin >> k;
 
-        sort(a.rbegin(), a.rend());
+            for (int j = 1; j <= k; j++) {
+                int x;
+                cin >> x;
 
-        ll sm = a[n - 1];
-        a.pop_back();
-
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
-            ans++;
-            a.pop_back();
-        }
-
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
-            }
-
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
+                adj[x].push_back(i);
+                deg[i]++;
             }
         }
 
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
+        int tot = 0;
+        queue<int> q;
+
+        for (int i = 1; i <= n; i++) {
+            if (deg[i] == 0) {
+                q.push(i);
+                tot++;
+            }
+        }
+
+        while (!q.empty()) {
+            int cur = q.front();
+            q.pop();
+
+            for (int nxt : adj[cur]) {
+                if (--deg[nxt] == 0) {
+                    tot++;
+                    q.push(nxt);
+                }
+
+                pages[nxt] = max(pages[nxt], pages[cur] + (cur > nxt));
+            }
+        }
+
+        if (tot != n) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        cout << *max_element(all(pages)) << '\n';
     }
 }

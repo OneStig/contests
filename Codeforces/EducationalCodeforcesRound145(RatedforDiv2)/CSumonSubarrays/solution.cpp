@@ -25,45 +25,20 @@ int main() {
     cin >> t;
 
     while (t--) {
-        ll n, k;
+        int n, k;
         cin >> n >> k;
 
-        vector<ll> a(n);
-
-        for (ll& x : a) {
-            cin >> x;
-        }
-
-        sort(a.rbegin(), a.rend());
-
-        ll sm = a[n - 1];
-        a.pop_back();
-
-        // count all things that repeat the least
-        ll ans = 1;
-
-        while (a.size() && sm == a[a.size() - 1]) {
-            ans++;
-            a.pop_back();
-        }
-
-        while (a.size()) {
-            ll diff = a[a.size() - 1] - sm;
-            if (k < diff * ans) {
-                break;
+        for (int i = 0; i < n; i++) {
+            if (k >= i + 1) {
+                cout << 2 << ' ';
+                k -= (i + 1);
             }
-
-            k -= diff * ans;
-            sm = a[a.size() - 1];
-
-            while (a.size() && sm == a[a.size() - 1]) {
-                ans++;
-                a.pop_back();
+            else {
+                cout << 2 * (k - i) - 1 << ' ';
+                k = 0;
             }
         }
 
-        sm += k / ans;
-        ans = ans - (k % ans);
-        cout << sm * n - ans + 1 << '\n';
+        cout << '\n';
     }
 }
