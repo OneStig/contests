@@ -23,50 +23,25 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    string s;
+    cin >> s;
 
-    while (t--) {
-        int n, m;
-        cin >> n >> m;
-        m--;
+    vector<pair<pair<int, int>, bool>> seq(sz(s));
 
-        vector<int> a(n);
+    int pfx = 0;
+    for (int i = 0; i < sz(s); i++) {
+        seq[i].first.first = pfx;
+        seq[i].first.second = -i;
+        seq[i].second = s[i] == '(';
 
-        for (int& x : a) {
-            cin >> x;
-        }
-
-        int ans{};
-
-        priority_queue<int> flip;
-        int pfx{};
-
-        for (int i = m; i >= 1; i--) {
-            pfx += a[i];
-            flip.push(a[i]);
-
-            if (pfx > 0) {
-                pfx -= 2 * flip.top();
-                flip.pop();
-                ans++;
-            }
-        }
-
-        priority_queue<int> flop;
-        int sfx{};
-
-        for (int i = m + 1; i < n; i++) {
-            sfx += a[i];
-            flop.push(-a[i]);
-
-            if (sfx < 0) {
-                sfx += 2 * flop.top();
-                flop.pop();
-                ans++;
-            }
-        }
-
-        cout << ans << '\n';
+        pfx += 1 * (s[i] == '(' ? 1 : -1);
     }
+
+    sort(all(seq));
+
+    for (int i = 0; i < sz(s); i++) {
+        cout << (seq[i].second ? '(' : ')');
+    }
+
+    cout << '\n';
 }

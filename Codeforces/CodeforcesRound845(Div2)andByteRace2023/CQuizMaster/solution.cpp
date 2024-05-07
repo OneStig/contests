@@ -20,16 +20,25 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_M = 1e5;
+const int INF = 1e9;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    vector<vector<int>> facts(MAX_M + 1);
+    for (int i = 1; i <= MAX_M; i++) {
+        for (int j = i; j <= MAX_M; j += i) {
+            facts[j].push_back(i);
+        }
+    }
 
-    while (t--) {
+    int tc;
+    cin >> tc;
+
+    while (tc--) {
         int n, m;
         cin >> n >> m;
-        m--;
 
         vector<int> a(n);
 
@@ -37,36 +46,39 @@ uci main() {
             cin >> x;
         }
 
-        int ans{};
+        sort(all(a));
 
-        priority_queue<int> flip;
-        int pfx{};
+        vector<int> freq(m + 1);
+        int count = 0;
 
-        for (int i = m; i >= 1; i--) {
-            pfx += a[i];
-            flip.push(a[i]);
+        int ans = INF;
 
-            if (pfx > 0) {
-                pfx -= 2 * flip.top();
-                flip.pop();
-                ans++;
+        int l = 0;
+        for (int r = 0; r < n; r++) {
+            for (int& f : facts[a[r]]) {
+                if (f > m) break;
+
+                if (!freq[f]++) {
+                    count++;
+                }
+            }
+            dbg(l, r, count);
+
+            while (count == m) {
+                ans = min(ans, a[r] - a[l]);
+
+                for (int& f : facts[a[l]]) {
+                    if (f > m) break;
+
+                    if (!--freq[f]) {
+                        count--;
+                    }
+                }
+
+                l++;
             }
         }
 
-        priority_queue<int> flop;
-        int sfx{};
-
-        for (int i = m + 1; i < n; i++) {
-            sfx += a[i];
-            flop.push(-a[i]);
-
-            if (sfx < 0) {
-                sfx += 2 * flop.top();
-                flop.pop();
-                ans++;
-            }
-        }
-
-        cout << ans << '\n';
+        cout << (ans == INF ? -1 : ans) << '\n';
     }
 }

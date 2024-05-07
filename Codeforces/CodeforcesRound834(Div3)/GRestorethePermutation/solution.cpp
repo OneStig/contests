@@ -27,46 +27,53 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m;
-        cin >> n >> m;
-        m--;
+        int n;
+        cin >> n;
 
-        vector<int> a(n);
+        vector<int> b(n / 2);
+        vector<int> a(n / 2);
 
-        for (int& x : a) {
+        bool valid = 1;
+        vector<int> seen(n + 1);
+
+        for (int& x : b) {
             cin >> x;
-        }
 
-        int ans{};
-
-        priority_queue<int> flip;
-        int pfx{};
-
-        for (int i = m; i >= 1; i--) {
-            pfx += a[i];
-            flip.push(a[i]);
-
-            if (pfx > 0) {
-                pfx -= 2 * flip.top();
-                flip.pop();
-                ans++;
+            if (seen[x]++) {
+                valid = 0;
             }
         }
 
-        priority_queue<int> flop;
-        int sfx{};
-
-        for (int i = m + 1; i < n; i++) {
-            sfx += a[i];
-            flop.push(-a[i]);
-
-            if (sfx < 0) {
-                sfx += 2 * flop.top();
-                flop.pop();
-                ans++;
+        set<int> unseen;
+        for (int i = 1; i <= n; i++) {
+            if (!seen[i]) {
+                unseen.insert(i);
             }
         }
 
-        cout << ans << '\n';
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            auto it = unseen.lower_bound(b[i]);
+
+            if (it == unseen.begin()) {
+                valid = 0;
+                break;
+            }
+
+            it--;
+
+            a[i] = *it;
+            unseen.erase(it);
+        }
+
+        if (!valid) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        for (int i = 0; i < n / 2; i++) {
+            cout << a[i] << ' ' << b[i] << ' ';
+        }
+
+        cout << '\n';
     }
 }

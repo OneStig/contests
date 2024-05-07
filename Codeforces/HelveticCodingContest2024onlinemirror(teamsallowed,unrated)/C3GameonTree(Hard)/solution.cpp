@@ -20,53 +20,41 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+bool dfs(int x, int par, vector<vector<int>>& adj) {
+    bool win = 1;
+
+    for (int& nb : adj[x]) {
+        if (nb == par) continue;
+
+        win = win && !dfs(nb, x, adj);
+        if (!win) break;
+    }
+
+    return win;
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, t;
+    cin >> n >> t;
+
+    vector<vector<int>> adj(n);
+
+    for (int i = 1; i < n; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
 
     while (t--) {
-        int n, m;
-        cin >> n >> m;
-        m--;
+        int start;
+        cin >> start;
+        start--;
 
-        vector<int> a(n);
-
-        for (int& x : a) {
-            cin >> x;
-        }
-
-        int ans{};
-
-        priority_queue<int> flip;
-        int pfx{};
-
-        for (int i = m; i >= 1; i--) {
-            pfx += a[i];
-            flip.push(a[i]);
-
-            if (pfx > 0) {
-                pfx -= 2 * flip.top();
-                flip.pop();
-                ans++;
-            }
-        }
-
-        priority_queue<int> flop;
-        int sfx{};
-
-        for (int i = m + 1; i < n; i++) {
-            sfx += a[i];
-            flop.push(-a[i]);
-
-            if (sfx < 0) {
-                sfx += 2 * flop.top();
-                flop.pop();
-                ans++;
-            }
-        }
-
-        cout << ans << '\n';
+        cout << (dfs(start, -1, adj) ? "Hermione" : "Ron") << '\n';
     }
 }
