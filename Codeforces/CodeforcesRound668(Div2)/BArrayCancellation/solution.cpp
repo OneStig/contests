@@ -27,39 +27,31 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        string s;
-        cin >> n >> k >> s;
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int& x : a) cin >> x;
 
-        bool flip = k % 2;
+        int freeinc = 0;
+        int ans = 0;
 
-        vector<int> ans(n);
+        for (int& x : a) {
+            if (x == 0) continue;
 
-        for (int i = 0; i < n; i++) {
-            if (flip) {
-                s[i] = (s[i] == '1' ? '0' : '1');
+            if (x > 0) {
+                freeinc += x;
             }
-
-            if (k > 0 && s[i] == '0') {
-                s[i] = '1';
-                k--;
-                ans[i]++;
-            }
-        }
-
-        if (k > 0) {
-            ans[n - 1] += k;
-            if (k % 2) {
-                s[n - 1] = (s[n - 1] == '1' ? '0' : '1');
+            else {
+                if (freeinc >= -x) {
+                    freeinc += x;
+                }
+                else {
+                    ans += -x - freeinc;
+                    freeinc = 0;
+                }
             }
         }
 
-        cout << s << '\n';
-
-        for (int& x : ans) {
-            cout << x << ' ';
-        }
-
-        cout << '\n';
+        cout << ans << '\n';
     }
 }

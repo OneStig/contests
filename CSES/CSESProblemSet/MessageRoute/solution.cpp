@@ -20,42 +20,54 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_N = 1e5 + 1;
+
+vector<int> adj[MAX_N];
+int parent[MAX_N];
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, m;
+    cin >> n >> m;
 
-    while (t--) {
-        int n, k;
-        string s;
-        cin >> n >> k >> s;
+    while (m--) {
+        int u, v;
+        cin >> u >> v;
 
-        bool flip = k % 2;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
 
-        vector<int> ans(n);
+    queue<int> bfs;
+    bfs.push(1);
+    parent[1] = -1;
 
-        for (int i = 0; i < n; i++) {
-            if (flip) {
-                s[i] = (s[i] == '1' ? '0' : '1');
-            }
+    while (!bfs.empty()) {
+        int cur = bfs.front();
+        bfs.pop();
 
-            if (k > 0 && s[i] == '0') {
-                s[i] = '1';
-                k--;
-                ans[i]++;
-            }
-        }
-
-        if (k > 0) {
-            ans[n - 1] += k;
-            if (k % 2) {
-                s[n - 1] = (s[n - 1] == '1' ? '0' : '1');
+        for (int& nb : adj[cur]) {
+            if (!parent[nb]) {
+                parent[nb] = cur;
+                bfs.push(nb);
             }
         }
+    }
 
-        cout << s << '\n';
+    if (!parent[n]) {
+        cout << "IMPOSSIBLE\n";
+    }
+    else {
+        vector<int> ans;
+        int bt = n;
+        while (bt != -1) {
+            ans.push_back(bt);
+            bt = parent[bt];
+        }
 
+        reverse(all(ans));
+        cout << sz(ans) << '\n';
         for (int& x : ans) {
             cout << x << ' ';
         }

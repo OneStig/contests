@@ -23,43 +23,40 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
+    set<int> good;
+
+    for (int k = 2; k <= 1e6; k++) {
+        int sum = 1 + k;
+        int mul = k * k;
+        for (int p = 3; p <= 63; p++) {
+            sum += mul;
+            if (sum > 1e18) break;
+            good.insert(sum);
+            
+            if (mul > 1e18 / k) break;
+            mul *= k;
+        }
+    }
+
     int t;
     cin >> t;
-
     while (t--) {
-        int n, k;
-        string s;
-        cin >> n >> k >> s;
+        int n;
+        cin >> n;
 
-        bool flip = k % 2;
-
-        vector<int> ans(n);
-
-        for (int i = 0; i < n; i++) {
-            if (flip) {
-                s[i] = (s[i] == '1' ? '0' : '1');
-            }
-
-            if (k > 0 && s[i] == '0') {
-                s[i] = '1';
-                k--;
-                ans[i]++;
-            }
+        if (good.ccontains(n)) {
+            cout << "YES" << '\n';
         }
+        else {
 
-        if (k > 0) {
-            ans[n - 1] += k;
-            if (k % 2) {
-                s[n - 1] = (s[n - 1] == '1' ? '0' : '1');
-            }
         }
-
-        cout << s << '\n';
-
-        for (int& x : ans) {
-            cout << x << ' ';
-        }
-
-        cout << '\n';
     }
 }
+
+// k > 1
+// k == 2 : 3,2 -> 7,4 -> 15,8 -> 31,16 -> 63,32
+// k == 3 : 4,3 -> 13,9 -> 40,27 -> 121,81
+// k == 4 : 5,4 -> 21,16 -> 85,64
+// 1 + k + k^2 + k^3 ...
+//
+// k(k(k(k + 1) + 1) + 1) + 1

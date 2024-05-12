@@ -27,37 +27,55 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        string s;
-        cin >> n >> k >> s;
+        int n;
+        cin >> n;
 
-        bool flip = k % 2;
+        vector<int> a(n);
+        vector<int> pos, neg;
+        int zeros{};
+        int mx = INT_MIN, mn = INT_MAX;
 
-        vector<int> ans(n);
-
-        for (int i = 0; i < n; i++) {
-            if (flip) {
-                s[i] = (s[i] == '1' ? '0' : '1');
+        for (int& x : a) {
+            cin >> x;
+            if (x == 0) {
+                zeros++;
+            }
+            else if (x > 0) {
+                pos.push_back(x);
+            }
+            else {
+                neg.push_back(x);
             }
 
-            if (k > 0 && s[i] == '0') {
-                s[i] = '1';
-                k--;
-                ans[i]++;
-            }
+            mx = max(mx, x);
+            mn = min(mn, x);
         }
 
-        if (k > 0) {
-            ans[n - 1] += k;
-            if (k % 2) {
-                s[n - 1] = (s[n - 1] == '1' ? '0' : '1');
-            }
+        int diff = mx - mn;
+
+        if (diff == 0) {
+            cout << "NO\n";
+            continue;
         }
 
-        cout << s << '\n';
+        cout << "YES\n";
 
-        for (int& x : ans) {
-            cout << x << ' ';
+        while (zeros--) {
+            cout << 0 << " ";
+        }
+
+        int sum = 0;
+        while (sz(pos) || sz(neg)) {
+            if (sum <= 0) {
+                sum += pos.back();
+                cout << pos.back() << ' ';
+                pos.pop_back();
+            }
+            else {
+                sum += neg.back();
+                cout << neg.back() << ' ';
+                neg.pop_back();
+            }
         }
 
         cout << '\n';

@@ -27,39 +27,32 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        string s;
-        cin >> n >> k >> s;
+        int n;
+        cin >> n;
 
-        bool flip = k % 2;
+        vector<int> freq(101);
 
-        vector<int> ans(n);
+        while (n--) {
+            int x;
+            cin >> x;
+            freq[x]++;
+        }
 
-        for (int i = 0; i < n; i++) {
-            if (flip) {
-                s[i] = (s[i] == '1' ? '0' : '1');
+        int a{}, b{};
+
+        for (int i = 0; i < 101; i++) {
+            if (freq[i] > 1) {
+                if (a == i) a++;
+                if (b == i) b++;
             }
-
-            if (k > 0 && s[i] == '0') {
-                s[i] = '1';
-                k--;
-                ans[i]++;
+            else if (freq[i] > 0) {
+                if (a == i) a++;
+            }
+            else {
+                break;
             }
         }
 
-        if (k > 0) {
-            ans[n - 1] += k;
-            if (k % 2) {
-                s[n - 1] = (s[n - 1] == '1' ? '0' : '1');
-            }
-        }
-
-        cout << s << '\n';
-
-        for (int& x : ans) {
-            cout << x << ' ';
-        }
-
-        cout << '\n';
+        cout << a + b << '\n';
     }
 }

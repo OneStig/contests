@@ -20,6 +20,38 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+void solve() {
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> fst(n + 1, n + 1);
+
+    while (m--) {
+        int x, y;
+        cin >> x >> y;
+
+        if (y < x) {
+            swap(x, y);
+        }
+
+        fst[x] = min(fst[x], y);
+    }
+
+    for (int i = n - 1; i >= 1; i--) {
+        fst[i] = min(fst[i], fst[i + 1]);
+    }
+
+    int ans = 0;
+
+    for (int i = 1; i <= n; i++) {
+        int k = fst[i] - i;
+        ans += k;
+        // ans += k * (k + 1) / 2;
+    }
+
+    cout << ans << '\n';
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -27,39 +59,6 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        string s;
-        cin >> n >> k >> s;
-
-        bool flip = k % 2;
-
-        vector<int> ans(n);
-
-        for (int i = 0; i < n; i++) {
-            if (flip) {
-                s[i] = (s[i] == '1' ? '0' : '1');
-            }
-
-            if (k > 0 && s[i] == '0') {
-                s[i] = '1';
-                k--;
-                ans[i]++;
-            }
-        }
-
-        if (k > 0) {
-            ans[n - 1] += k;
-            if (k % 2) {
-                s[n - 1] = (s[n - 1] == '1' ? '0' : '1');
-            }
-        }
-
-        cout << s << '\n';
-
-        for (int& x : ans) {
-            cout << x << ' ';
-        }
-
-        cout << '\n';
+        solve();
     }
 }

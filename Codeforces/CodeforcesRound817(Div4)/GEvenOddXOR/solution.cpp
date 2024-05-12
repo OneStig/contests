@@ -27,36 +27,43 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        string s;
-        cin >> n >> k >> s;
+        int n;
+        cin >> n;
 
-        bool flip = k % 2;
+        vector<int> a;
 
-        vector<int> ans(n);
+        if (n == 3) {
+            cout << "2 1 3" << '\n';
+            continue;
+        }
 
-        for (int i = 0; i < n; i++) {
-            if (flip) {
-                s[i] = (s[i] == '1' ? '0' : '1');
+        if (n % 2) {
+            a.push_back(0);
+        }
+
+        if ((n / 2) % 2 == 0) {
+            for (int i = 1; i <= n / 2; i++) {
+                a.push_back((i << 1));
+                a.push_back((i << 1) + 1);
             }
+        }
+        else {
+            for (int i = 1; i <= n / 2; i++) {
+                a.push_back((i << 2) + 1);
 
-            if (k > 0 && s[i] == '0') {
-                s[i] = '1';
-                k--;
-                ans[i]++;
+                if (i == n / 2) {
+                    a.push_back((i << 2) + 3);
+                }
+                else if (i == n / 2 - 1) {
+                    a.push_back((i << 2) + 2);
+                }
+                else {
+                    a.push_back(i << 2);
+                }
             }
         }
 
-        if (k > 0) {
-            ans[n - 1] += k;
-            if (k % 2) {
-                s[n - 1] = (s[n - 1] == '1' ? '0' : '1');
-            }
-        }
-
-        cout << s << '\n';
-
-        for (int& x : ans) {
+        for (int& x : a) {
             cout << x << ' ';
         }
 

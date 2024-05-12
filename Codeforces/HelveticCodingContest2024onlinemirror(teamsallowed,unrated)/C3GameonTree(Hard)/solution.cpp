@@ -20,41 +20,52 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-bool dfs(int x, int par, vector<vector<int>>& adj) {
-    bool win = 1;
+const int MAX_N = 2e5 + 1;
 
+int n, t;
+vector<int> adj[MAX_N];
+int first[MAX_N], second[MAX_N];
+
+void dfs(int x, int par) {
     for (int& nb : adj[x]) {
         if (nb == par) continue;
 
-        win = win && !dfs(nb, x, adj);
-        if (!win) break;
-    }
+        dfs(nb, x);
 
-    return win;
+        first[x] += !first[nb];
+    }
+}
+
+void dfsa(int x, int par, int flip) {
+    second[x] = first[x] + !flip;
+
+    for (auto& nb : adj[x]) {
+        if (nb == par) continue;
+
+        dfsa(nb, x, second[x] - !first[nb]);
+    }
 }
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, t;
     cin >> n >> t;
-
-    vector<vector<int>> adj(n);
 
     for (int i = 1; i < n; i++) {
         int u, v;
         cin >> u >> v;
-        u--, v--;
 
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
 
-    while (t--) {
-        int start;
-        cin >> start;
-        start--;
+    dfs(1, -1);
+    dfsa(1, -1, 1);
 
-        cout << (dfs(start, -1, adj) ? "Hermione" : "Ron") << '\n';
+    while (t--) {
+        int q;
+        cin >> q;
+
+        cout << (second[q] ? "Ron" : "Hermione") << '\n';
     }
 }
