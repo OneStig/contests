@@ -20,62 +20,26 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n, x;
-    cin >> n >> x;
-
-    vector<int> p(n + 1);
-    set<int> unseen;
-    int xpos{};
-
-    for (int i = 1; i <= n; i++) {
-        cin >> p[i];
-
-        if (p[i] == x) {
-            xpos = i;
-        }
-
-        unseen.insert(p[i]);
-    }
-
-    int l = 1, r = n + 1;
-
-    while (r - l != 1) {
-        int m = (r + l) / 2;
-        unseen.erase(p[m]);
-
-        if (p[m] <= x) {
-            l = m;
-        }
-        else {
-            r = m;
-        }
-    }
-
-    if (l == xpos) {
-        cout << 0 << '\n';
-        return;
-    }
-
-    // swap xpos and l
-    swap(p[xpos], p[l]);
-
-    if (unseen.contains(x) || p[l] <= x) {
-        cout << "1\n" << xpos << ' ' << l << '\n';
-    }
-    else {
-        cout << "2\n" << xpos << ' ' << l << '\n';
-        cout << "aaaa\n";
-    }
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n), b(m);
 
-    while (t--) {
-        solve();
+    for (int& x : a) cin >> x;
+    for (int& x : b) cin >> x;
+
+    sort(all(a));
+
+    int curb{}, ans{};
+    for (int i = 0; i < n; i++) {
+        while (!b[curb]) {
+            curb++;
+        }
+        ans += abs(a[i] - (curb + 1));
+        b[curb]--;
     }
+
+    cout << ans << '\n';
 }

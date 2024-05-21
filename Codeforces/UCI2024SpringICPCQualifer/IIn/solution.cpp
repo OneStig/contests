@@ -20,52 +20,44 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+int n, c, q;
+string s;
+vector<array<int, 3>> segs;
+
+char search(int k) {
+    if (k <= n) {
+        return s[k - 1];
+    }
+
+    for (int i = 1; i < sz(segs); i++) {
+        if (k <= segs[i][0]) {
+            return search(segs[i][2] - segs[i][0] + k);
+        }
+    }
+
+    // fail here
+    return 'x';
+}
+
 void solve() {
-    int n, x;
-    cin >> n >> x;
+    cin >> n >> c >> q >> s;
 
-    vector<int> p(n + 1);
-    set<int> unseen;
-    int xpos{};
+    segs = vector<array<int, 3>>();
+    segs.push_back({n, 1, n});
 
-    for (int i = 1; i <= n; i++) {
-        cin >> p[i];
+    int curlen = n;
 
-        if (p[i] == x) {
-            xpos = i;
-        }
-
-        unseen.insert(p[i]);
+    for (int i = 0; i < c; i++) {
+        int l, r;
+        cin >> l >> r;
+        curlen += r - l + 1;
+        segs.push_back({curlen, l , r});
     }
 
-    int l = 1, r = n + 1;
-
-    while (r - l != 1) {
-        int m = (r + l) / 2;
-        unseen.erase(p[m]);
-
-        if (p[m] <= x) {
-            l = m;
-        }
-        else {
-            r = m;
-        }
-    }
-
-    if (l == xpos) {
-        cout << 0 << '\n';
-        return;
-    }
-
-    // swap xpos and l
-    swap(p[xpos], p[l]);
-
-    if (unseen.contains(x) || p[l] <= x) {
-        cout << "1\n" << xpos << ' ' << l << '\n';
-    }
-    else {
-        cout << "2\n" << xpos << ' ' << l << '\n';
-        cout << "aaaa\n";
+    while (q--) {
+        int k;
+        cin >> k;
+        cout << search(k) << '\n';
     }
 }
 

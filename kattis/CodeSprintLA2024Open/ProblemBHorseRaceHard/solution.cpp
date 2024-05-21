@@ -21,61 +21,29 @@ typedef int uci;
 #define all(a) (a).begin(), (a).end()
 
 void solve() {
-    int n, x;
-    cin >> n >> x;
-
-    vector<int> p(n + 1);
-    set<int> unseen;
-    int xpos{};
-
-    for (int i = 1; i <= n; i++) {
-        cin >> p[i];
-
-        if (p[i] == x) {
-            xpos = i;
-        }
-
-        unseen.insert(p[i]);
+    int n; // win condition > n / 2
+    cin >> n;
+    vector<int> a(n), b(n);
+    vector<pair<int, int>> bord;
+    vector<int> bpfx(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
     }
 
-    int l = 1, r = n + 1;
-
-    while (r - l != 1) {
-        int m = (r + l) / 2;
-        unseen.erase(p[m]);
-
-        if (p[m] <= x) {
-            l = m;
-        }
-        else {
-            r = m;
-        }
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+        bord[i].push_back(b[i], i);
     }
 
-    if (l == xpos) {
-        cout << 0 << '\n';
-        return;
-    }
+    sort(all(bord));
 
-    // swap xpos and l
-    swap(p[xpos], p[l]);
+    for (int i = 0; i < n; i++) {
 
-    if (unseen.contains(x) || p[l] <= x) {
-        cout << "1\n" << xpos << ' ' << l << '\n';
-    }
-    else {
-        cout << "2\n" << xpos << ' ' << l << '\n';
-        cout << "aaaa\n";
     }
 }
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
-
-    while (t--) {
-        solve();
-    }
+    solve();
 }

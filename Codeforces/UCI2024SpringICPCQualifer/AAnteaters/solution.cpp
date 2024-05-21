@@ -20,53 +20,46 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+void dfs(int x, int par, vector<vector<int>>& adj, vector<array<int, 2>>& lr, vector<array<int, 2>>& dp) {
+    for (int& nb : adj[x]) {
+        if (nb == par) continue;
+        dfs(nb, x, adj, lr, dp);
+    }
+
+    if (par != -1) {
+        // left, max(left, right)
+        // right, max(left, right)
+        dp[par][0] += max(dp[x][0] + abs(lr[x][0] - lr[par][0]), dp[x][1] + abs(lr[x][1] - lr[par][0]));
+        dp[par][1] += max(dp[x][0] + abs(lr[x][0] - lr[par][1]), dp[x][1] + abs(lr[x][1] - lr[par][1]));
+    }
+}
+
 void solve() {
-    int n, x;
-    cin >> n >> x;
+    int n;
+    cin >> n;
 
-    vector<int> p(n + 1);
-    set<int> unseen;
-    int xpos{};
+    vector<array<int, 2>> lr(n);
 
-    for (int i = 1; i <= n; i++) {
-        cin >> p[i];
-
-        if (p[i] == x) {
-            xpos = i;
-        }
-
-        unseen.insert(p[i]);
+    for (auto& x : lr) {
+        cin >> x[0] >> x[1];
     }
 
-    int l = 1, r = n + 1;
+    vector<vector<int>> adj(n);
 
-    while (r - l != 1) {
-        int m = (r + l) / 2;
-        unseen.erase(p[m]);
+    for (int i = 1; i < n; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
 
-        if (p[m] <= x) {
-            l = m;
-        }
-        else {
-            r = m;
-        }
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
 
-    if (l == xpos) {
-        cout << 0 << '\n';
-        return;
-    }
+    vector<array<int, 2>> dp(n);
 
-    // swap xpos and l
-    swap(p[xpos], p[l]);
+    dfs(0, -1, adj, lr, dp);
 
-    if (unseen.contains(x) || p[l] <= x) {
-        cout << "1\n" << xpos << ' ' << l << '\n';
-    }
-    else {
-        cout << "2\n" << xpos << ' ' << l << '\n';
-        cout << "aaaa\n";
-    }
+    cout << max(dp[0][0], dp[0][1]) << '\n';
 }
 
 uci main() {
