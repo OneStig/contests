@@ -20,53 +20,31 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int n, m;
-
-int ask(int x, int y) {
-    int answer;
-    cout << "? " << x << ' ' << y << endl;
-    cin >> answer;
-    return answer;
-}
-
-void solve() {
-    cin >> n >> m;
-
-    int d1 = ask(1, 1);
-
-    if (d1 == 0) {
-        cout << "! 1 1" << endl;
-        return;
-    }
-
-    int d2 = n + m - 2 - ask(n, m);
-    int d3 = ask(1, m);
-
-    // 2 possible answers, intersection of d1 d3, or d2 d3
-    int x1 = (3 + d1 - m + d3) / 2;
-    int y1 = d1 - x1 + 2;
-
-    int x2 = (3 + d2 - m + d3) / 2;
-    int y2 = d2 - x2 + 2;
-    dbg(d1, d2, d3, x1, y1, x2, y2);
-
-    int d4 = ask(x1, y1);
-
-    if (d4 == 0) {
-        cout << "! " << x1 << ' ' << y2 << endl;
-    }
-    else {
-        cout << "! " << x2 << ' ' << y2 << endl;
-    }
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
 
-    while (t--) {
-        solve();
+    // a = hh, b = hf | fh, c = ff
+
+    vector<int> a(n), b(n), c(n);
+
+    for (int& x : a) cin >> x;
+    for (int& x : b) cin >> x;
+    for (int& x : c) cin >> x;
+
+    vector<array<int, 2>> ans(n);
+    ans[0][0] = a[0];
+    ans[0][1] = b[0];
+
+    for (int i = 1; i < n; i++) {
+        // fed before next one
+        ans[i][0] = max(a[i] + ans[i - 1][1], b[i] + ans[i - 1][0]);
+        // fed after next one
+        ans[i][1] = max(b[i] + ans[i - 1][1], c[i] + ans[i - 1][0]);
     }
+
+    // last one can't be fed "after" next one
+    cout << ans[n - 1][0] << '\n';
 }

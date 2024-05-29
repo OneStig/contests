@@ -20,11 +20,39 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void sovle() {
-    int n;
-    cin >> n;
+char ask(int i, int& x) {
+    cout << "? " << i << endl;
+    char c;
+    cin >> c;
 
+    if (c == '<') {
+        x--;
+    }
+    else if (c == '>') {
+        x++;
+    }
 
+    return c;
+}
+
+void solve() {
+    int n, x;
+    cin >> n >> x;
+
+    vector<int> ans(n);
+    // first lets find 1 and n so we can manipulate x
+    int onep{1}, np{1};
+
+    for (int i = 1; i <= n; i++) {
+        char c = ask(i);
+        if (c == '<') {
+            onep = i;
+
+            while (c == '<') {
+                c = ask(i);
+            }
+        }
+    }
 }
 
 uci main() {

@@ -20,53 +20,43 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int n, m;
+const int MAX_N = 1e5 + 1;
 
-int ask(int x, int y) {
-    int answer;
-    cout << "? " << x << ' ' << y << endl;
-    cin >> answer;
-    return answer;
-}
+vector<int> adj[MAX_N];
 
-void solve() {
-    cin >> n >> m;
 
-    int d1 = ask(1, 1);
+void dfs(int x, int par) {
+    int max1{}, maxnode{}, max2{};
 
-    if (d1 == 0) {
-        cout << "! 1 1" << endl;
-        return;
-    }
+    for (int& nb : adj[x]) {
+        if (nb == par) continue;
 
-    int d2 = n + m - 2 - ask(n, m);
-    int d3 = ask(1, m);
-
-    // 2 possible answers, intersection of d1 d3, or d2 d3
-    int x1 = (3 + d1 - m + d3) / 2;
-    int y1 = d1 - x1 + 2;
-
-    int x2 = (3 + d2 - m + d3) / 2;
-    int y2 = d2 - x2 + 2;
-    dbg(d1, d2, d3, x1, y1, x2, y2);
-
-    int d4 = ask(x1, y1);
-
-    if (d4 == 0) {
-        cout << "! " << x1 << ' ' << y2 << endl;
-    }
-    else {
-        cout << "! " << x2 << ' ' << y2 << endl;
+        int cur = dfs(nb, )
     }
 }
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, m, d;
+    cin >> n >> m >> d;
 
-    while (t--) {
-        solve();
+    vector<bool> bad(n);
+
+    for (int i = 0; i < m; i++) {
+        int p;
+        cin >> p;
+        bad[p - 1] = 1;
     }
+
+    for (int i = 1; i < n; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    dfs(0, 0);
 }

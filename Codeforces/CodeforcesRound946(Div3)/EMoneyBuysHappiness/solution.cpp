@@ -20,45 +20,7 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int n, m;
-
-int ask(int x, int y) {
-    int answer;
-    cout << "? " << x << ' ' << y << endl;
-    cin >> answer;
-    return answer;
-}
-
-void solve() {
-    cin >> n >> m;
-
-    int d1 = ask(1, 1);
-
-    if (d1 == 0) {
-        cout << "! 1 1" << endl;
-        return;
-    }
-
-    int d2 = n + m - 2 - ask(n, m);
-    int d3 = ask(1, m);
-
-    // 2 possible answers, intersection of d1 d3, or d2 d3
-    int x1 = (3 + d1 - m + d3) / 2;
-    int y1 = d1 - x1 + 2;
-
-    int x2 = (3 + d2 - m + d3) / 2;
-    int y2 = d2 - x2 + 2;
-    dbg(d1, d2, d3, x1, y1, x2, y2);
-
-    int d4 = ask(x1, y1);
-
-    if (d4 == 0) {
-        cout << "! " << x1 << ' ' << y2 << endl;
-    }
-    else {
-        cout << "! " << x2 << ' ' << y2 << endl;
-    }
-}
+const int MAX_H = 1e5 + 1, INF = 1e10;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -67,6 +29,39 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int m, x;
+        cin >> m >> x;
+
+        // dp[i][j] = min cost to achieve j happiness after i months
+        vector<vector<int>> dp(2, vector<int>(MAX_H, INF));
+        dp[0][0] = 0;
+
+        int hsum{};
+
+        for (int i = 0; i < m; i++) {
+            int c, h;
+            cin >> c >> h;
+            hsum += h;
+
+            for (int j = 0; j <= hsum; j++) {
+                dp[1][j] = min(dp[1][j], dp[0][j]);
+
+                if (dp[0][j] + c <= x * i) {
+                    dp[1][j + h] = min(dp[1][j + h], dp[0][j] + c);
+                }
+            }
+            swap(dp[0], dp[1]);
+        }
+
+        int ans{};
+
+        for (int i = hsum; i >= 0; i--) {
+            if (dp[0][i] < INF) {
+                ans = i;
+                break;
+            }
+        }
+
+        cout << ans << '\n';
     }
 }
