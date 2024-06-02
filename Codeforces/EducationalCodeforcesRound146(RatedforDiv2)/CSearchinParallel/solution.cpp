@@ -19,62 +19,40 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int MAX_N = 2e5 + 1;
-int n, m, b, e;
-
 void solve() {
-    cin >> n >> m;
+    int n, s1, s2;
+    cin >> n >> s1 >> s2;
 
-    vector<set<int>> adj(n + m);
-    vector<int> depth(n + m, -1);
+    vector<pair<int, int>> freq(n);
 
-    map<int, int> color;
+    for (int i = 1; i <= n; i++) {
+        int r;
+        cin >> r;
 
-    for (int i = 0; i < m; i++) {
-        int u, v, c;
-        cin >> u >> v >> c;
-        u--, v--;
+        freq[i - 1] = {r, i};
+    }
 
-        if (color.contains(c)) {
-            c = color[c] + n;
+    sort(all(freq));
+
+    int at = s1, bt = s2;
+    vector<int> a, b;
+
+    for (int i = n - 1; i >= 0; i--) {
+        if (at < bt) {
+            a.push_back(freq[i].second);
+            at += s1;
         }
         else {
-            color[c] = sz(color);
-            c = color[c] + n;
-        }
-
-        adj[c].insert(u);
-        adj[c].insert(v);
-
-        adj[v].insert(c);
-        adj[u].insert(c);
-    }
-
-    cin >> b >> e;
-    b--, e--;
-
-    depth[b] = 0;
-
-    queue<int> bfs;
-    bfs.push(b);
-
-    while (!bfs.empty()) {
-        int cur = bfs.front();
-        bfs.pop();
-
-        if (cur == e) {
-            break;
-        }
-
-        for (int nb : adj[cur]) {
-            if (depth[nb] == -1) {
-                depth[nb] = depth[cur] + 1;
-                bfs.push(nb);
-            }
+            b.push_back(freq[i].second);
+            bt += s2;
         }
     }
 
-    cout << depth[e] / 2 << '\n';
+    cout << sz(a);
+    for (int& x : a) cout << ' ' << x;
+    cout << '\n' << sz(b);
+    for (int& x : b) cout << ' ' << x;
+    cout << '\n';
 }
 
 uci main() {
