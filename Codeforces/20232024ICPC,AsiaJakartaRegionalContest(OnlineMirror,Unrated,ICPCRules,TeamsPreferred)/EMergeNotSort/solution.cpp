@@ -28,8 +28,6 @@ uci main() {
     vector<int> c(2 * n);
     for (int& x : c) cin >> x;
 
-    dbg(c);
-
     vector<pair<int, int>> chunks;
 
     int mx{}, chunk{-1};
@@ -44,7 +42,6 @@ uci main() {
     }
 
     chunks.push_back({chunk, 2 * n});
-    dbg(chunks);
 
     vector<bool> dp(n + 1);
     vector<int> btrack(n + 1); // backtrack
@@ -53,7 +50,51 @@ uci main() {
     for (int i = 0; i < sz(chunks); i++) {
         vector<bool> ndp(n + 1);
         for (int j = 0; j <= n; j++) {
+            int prev = j - (chunks[i].second - chunks[i].first);
+            if (dp[j]) {
+                ndp[j] = 1;
+            }
+            else if (prev >= 0 && dp[prev]) {
+                ndp[j] = 1;
+                btrack[j] = i;
+            }
+        }
+        dp = ndp;
+    }
 
+    if (!dp[n]) {
+        cout << -1 << '\n';
+        return 0;
+    }
+
+    // backtrack to find the answer
+    int cur = n;
+    set<int> aset;
+    vector<int> chunka;
+
+    while (cur != 0) {
+        chunka.push_back(btrack[cur]);
+        aset.insert(btrack[cur]);
+
+        cur -= chunks[btrack[cur]].second - chunks[btrack[cur]].first;
+    }
+
+    reverse(all(chunka));
+
+    for (int& ca : chunka) {
+        for (int j = chunks[ca].first; j < chunks[ca].second; j++) {
+            cout << c[j] << ' ';
         }
     }
+
+    cout << '\n';
+
+    for (int cb = 0; cb < sz(chunks); cb++) {
+        if (aset.contains(cb)) continue;
+        for (int j = chunks[cb].first; j < chunks[cb].second; j++) {
+            cout << c[j] << ' ';
+        }
+    }
+
+    cout << '\n';
 }
