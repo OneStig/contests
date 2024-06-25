@@ -20,12 +20,50 @@ typedef int uci;
 #define all(a) (a).begin(), (a).end()
 
 void solve() {
-    int n;
-    cin >> n;
+    int n, lb, rb;
+    cin >> n >> lb >> rb;
 
-    vector<int> a(n), b(n);
-    for (int& x : a) cin >> x;
-    for (int& x : b) cin >> x;
+    vector<vector<int>> nums;
+    nums.push_back(vector<int>());
+
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        if (x > rb) {
+            nums.push_back(vector<int>());
+        }
+        else {
+            nums.back().push_back(x);
+        }
+    }
+
+    int ans{};
+
+    for (auto& a : nums) {
+        int cursum{};
+        bool wind;
+        int l{};
+        for (int r = 0; r < sz(a); r++) {
+            if (l == r) {
+                cursum = a[r];
+            }
+            else {
+                cursum += a[r];
+            }
+
+            while (cursum > rb && l < r) {
+                cursum -= a[l];
+                l++;
+            }
+
+            if (cursum <= rb && cursum >= lb) {
+                ans++;
+                l = r + 1;
+            }
+        }
+    }
+
+    cout << ans << '\n';
 }
 
 uci main() {

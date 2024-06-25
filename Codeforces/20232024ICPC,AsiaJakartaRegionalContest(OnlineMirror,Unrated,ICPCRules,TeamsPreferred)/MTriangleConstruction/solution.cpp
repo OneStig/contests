@@ -19,22 +19,26 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-
-    vector<int> a(n), b(n);
-    for (int& x : a) cin >> x;
-    for (int& x : b) cin >> x;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
 
-    while (t--) {
-        solve();
+    vector<int> a(n);
+
+    int sum{};
+    int mx{};
+    for (int& x : a) {
+        cin >> x;
+        sum += x;
+        mx = max(mx, x);
+    }
+
+    if (mx > 2 * (sum - mx)) {
+        cout << sum - mx << '\n';
+    }
+    else {
+        cout << sum / 3 << '\n';
     }
 }

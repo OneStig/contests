@@ -19,14 +19,7 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-
-    vector<int> a(n), b(n);
-    for (int& x : a) cin >> x;
-    for (int& x : b) cin >> x;
-}
+const int INF = 1e10;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -35,6 +28,29 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+
+        vector<int> a(n), b(n);
+        int c;
+
+        for (int& x : a) cin >> x;
+        for (int& x : b) cin >> x;
+        cin >> c;
+
+        int tot{};
+        int mn = INF;
+        for (int i = 0; i < n; i++) {
+            int cur = abs(a[i] - b[i]);
+            tot += cur;
+            mn = min({
+                mn,
+                abs(a[i] - c),
+                abs(a[i] - c) + abs(c - b[i]) - cur,
+                abs(b[i] - c)
+            });
+        }
+
+        cout << tot + mn + 1 << '\n';
     }
 }

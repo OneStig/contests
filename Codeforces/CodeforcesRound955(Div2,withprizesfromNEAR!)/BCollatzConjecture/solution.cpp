@@ -19,15 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-
-    vector<int> a(n), b(n);
-    for (int& x : a) cin >> x;
-    for (int& x : b) cin >> x;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -35,6 +26,28 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int x, y, k;
+        cin >> x >> y >> k;
+
+        while (k >= 0) {
+            if (x == 1) {
+                x += k % (y - 1);
+                break;
+            }
+            else if (x + k < (x / y) * y + y) {
+                x = x + k;
+                break;
+            }
+            else {
+                int inc = y - (x % y);
+                k -= inc;
+                x = (x + inc);
+                while (x % y == 0) {
+                    x /= y;
+                }
+            }
+        }
+
+        cout << x << '\n';
     }
 }

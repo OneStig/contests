@@ -19,15 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-
-    vector<int> a(n), b(n);
-    for (int& x : a) cin >> x;
-    for (int& x : b) cin >> x;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -35,6 +26,33 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n, k;
+        cin >> n >> k;
+
+        vector<int> a(n);
+        unordered_map<int, vector<int>> md;
+
+        for (int& x : a) {
+            cin >> x;
+            md[x % k].push_back(x);
+        }
+
+        bool yes = 1;
+
+        int bad = -1;
+        for (const auto& [x, nums] : md) {
+            if (sz(nums) % 2) {
+                if (n % 2) {
+                    if (bad == -1) {
+                        bad =
+                    }
+                }
+                else {
+                    yes = 0;
+                    break;
+                }
+            }
+        }
+
     }
 }

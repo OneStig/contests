@@ -19,22 +19,48 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-
-    vector<int> a(n), b(n);
-    for (int& x : a) cin >> x;
-    for (int& x : b) cin >> x;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
 
-    while (t--) {
-        solve();
+    vector<int> ans(10);
+
+    int place = 1;
+    for (int d = 0; d < 10; d++, place *= 10) {
+        int above = n / place / 10;
+        int cur = (n / place) % 10;
+
+        for (int i = 1; i <= 9; i++) {
+            ans[i] += above * place;
+            if (i == cur) {
+                ans[i] += n - (n / place * place) + 1;
+            }
+            else if (i < cur) {
+                ans[i] += place;
+            }
+        }
+
+        // count 0 separately
+
+        if (above > 0) {
+            if (cur == 0) {
+                ans[0] += (above - 1) * place + (n - n / place * place) + 1;
+            }
+            else {
+                ans[0] += above * place;
+            }
+        }
     }
+
+    for (int i = 0; i < 10; i++) {
+        if (i != 0) {
+            cout << ' ';
+        }
+
+        cout << ans[i];
+    }
+
+    cout << '\n';
 }
