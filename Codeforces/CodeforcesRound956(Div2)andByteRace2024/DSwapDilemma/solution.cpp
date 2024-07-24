@@ -19,37 +19,50 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int MAX_N = 5e4, INF = 1e14;
-int n;
-
-int a[MAX_N], tree[MAX_N];
-
-void solve() {
-    cin >> n;
-
-    for (int i = 0; i < n; i++) {
-        cin >> a[i];
-    }
-
-    vector<vector<int>> adj(n);
-    for (int i = 1; i < n; i++) {
-        int par;
-        cin >> par;
-        par--;
-
-        tree[i] = par;
-        adj[par].push_back(i);
-    }
-
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
     int t;
     cin >> t;
 
+    vector<int> apos(200001), bpos(200001);
+
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+        set<int> freq;
+        vector<int> a(n), b(n);
+
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+            apos[a[i]] = i;
+            freq.insert(a[i]);
+        }
+
+        bool yes = 1;
+
+        for (int i = 0; i < n; i++) {
+            cin >> b[i];
+            bpos[b[i]] = i;
+            if (freq.find(b[i]) == freq.end()) {
+                yes = 0;
+            }
+        }
+
+        if (yes) {
+            int swaps{};
+
+            for (int i = 0; i < n; i++) {
+                if (a[i] != b[i]) {
+                    apos[a[i]] = apos[b[i]];
+                    swap(a[i], a[apos[b[i]]]);
+                    swaps++;
+                }
+            }
+
+            yes = !(swaps % 2);
+        }
+
+        cout << (yes ? "YES\n" : "NO\n");
     }
 }

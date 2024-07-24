@@ -19,30 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int MAX_N = 5e4, INF = 1e14;
-int n;
-
-int a[MAX_N], tree[MAX_N];
-
-void solve() {
-    cin >> n;
-
-    for (int i = 0; i < n; i++) {
-        cin >> a[i];
-    }
-
-    vector<vector<int>> adj(n);
-    for (int i = 1; i < n; i++) {
-        int par;
-        cin >> par;
-        par--;
-
-        tree[i] = par;
-        adj[par].push_back(i);
-    }
-
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -50,6 +26,9 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n, m;
+        cin >> n >> m;
+
+
     }
 }
