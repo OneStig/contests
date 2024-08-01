@@ -19,10 +19,7 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-}
+const int MOD = 1e9 + 7;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -31,6 +28,43 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        string s;
+        cin >> s;
+
+        int n = sz(s);
+        unordered_map<int, vector<int>> levels;
+
+        levels[0].push_back(0);
+        int cur{};
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '1') {
+                cur++;
+            }
+            else {
+                cur--;
+            }
+            levels[cur].push_back(i + 1);
+        }
+
+        int ans{};
+
+        for (const auto [_, cur] : levels) {
+            // prefixes of possible rightbounds
+            int k = sz(cur);
+            vector<int> pfx(k);
+            pfx[k - 1] = n - cur[k - 1] + 1;
+
+            for (int i = k - 2; i >= 0; i--) {
+                pfx[i] = n - cur[i] + 1 + pfx[i + 1];
+            }
+
+            for (int i = 0; i < k - 1; i++) {
+                int possib = (cur[i] + 1) * pfx[i + 1];
+                ans += possib;
+                ans %= MOD;
+            }
+        }
+
+        cout << ans << '\n';
     }
 }

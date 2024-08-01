@@ -19,10 +19,7 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-}
+const int MAX_A = 1 << 30;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -31,6 +28,42 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+
+        vector<int> a(n);
+        vector<int> p = {0, 0};
+
+        int mx{};
+
+        for (int& x : a) {
+            cin >> x;
+            p[x % 2]++;
+            mx = max(mx, x);
+        }
+
+        if (p[0] != 0 && p[1] != 0) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        vector<int> ans;
+        int cur = MAX_A;
+
+        while (cur > 1) {
+            cur /= 2;
+            ans.push_back(cur);
+        }
+
+        if (p[0]) {
+            ans.push_back(1);
+        }
+
+        cout << sz(ans) << '\n';
+        for (int& x : ans) {
+            cout << x << ' ';
+        }
+
+        cout << '\n';
     }
 }

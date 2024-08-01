@@ -19,11 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -31,6 +26,22 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n, x;
+        cin >> n >> x;
+
+        int ans{};
+
+        for (int a = 1; a <= x - 2; a++) {
+            for (int b = 1; b < n / a; b++) {
+                int ccount = min({
+                    (n - a * b) / (a + b),
+                    x - a - b
+                });
+
+                ans += max(ccount, 0ll);
+            }
+        }
+
+        cout << ans << '\n';
     }
 }

@@ -19,11 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -31,6 +26,26 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+
+        vector<pair<int, int>> coords(n);
+        map<int, int> s, e, nw, ne;
+
+        for (auto& x : coords) {
+            cin >> x.first >> x.second;
+            s[x.first]++;
+            e[x.second]++;
+            nw[x.second + x.first]++;
+            ne[x.second - x.first]++;
+        }
+
+        int ans{};
+
+        for (auto& x : coords) {
+            ans += s[x.first] + e[x.second] + nw[x.second + x.first] + ne[x.second - x.first] - 4;
+        }
+
+        cout << ans << '\n';
     }
 }

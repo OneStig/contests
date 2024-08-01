@@ -20,8 +20,35 @@ typedef int uci;
 #define all(a) (a).begin(), (a).end()
 
 void solve() {
-    int n;
-    cin >> n;
+    int n, q;
+    cin >> n >> q;
+    string a, b;
+    cin >> a >> b;
+
+    vector<vector<int>> apfx(26, vector<int>(n + 1)), bpfx(26, vector<int>(n + 1));
+
+    for (int i = 0; i < n; i++) {
+        for (int c = 0; c < 26; c++) {
+            apfx[c][i + 1] = apfx[c][i];
+            bpfx[c][i + 1] = bpfx[c][i];
+        }
+
+        apfx[a[i] - 'a'][i + 1]++;
+        bpfx[b[i] - 'a'][i + 1]++;
+    }
+
+    while (q--) {
+        int l, r;
+        cin >> l >> r;
+
+        int total{};
+
+        for (int c = 0; c < 26; c++) {
+            total += abs((apfx[c][r] - apfx[c][l - 1]) - (bpfx[c][r] - bpfx[c][l - 1]));
+        }
+
+        cout << total / 2 << '\n';
+    }
 }
 
 uci main() {

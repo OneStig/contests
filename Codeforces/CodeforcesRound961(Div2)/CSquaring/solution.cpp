@@ -19,11 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -31,6 +26,28 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+
+        vector<int> a(n);
+        for (int& x : a) cin >> x;
+
+        int prev = a[0], times = 0;
+        int ans{};
+        for (int i = 1; i < n; i++) {
+            if (a[i] == 1 && prev != 1) {
+                ans = -1;
+                break;
+            }
+
+            ld match = log2(prev) / log2(a[i]);
+            int needed = max(0ll, (int)(ceil(log2(match)) + times));
+
+            ans += needed;
+            prev = a[i];
+            times = needed;
+        }
+
+        cout << ans << '\n';
     }
 }

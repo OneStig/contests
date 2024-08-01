@@ -19,11 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -31,6 +26,36 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+
+        vector<pair<int, int>> x(n);
+        vector<int> sfx(n);
+        for (int i = 0; i < n; i++) {
+            cin >> x[i].first;
+            x[i].second = i;
+        }
+
+        sort(all(x));
+
+        for (int i = n - 2; i >= 0; i--) {
+            sfx[i] = sfx[i + 1] + x[i + 1].first;
+        }
+
+        int left{};
+        vector<int> ans(n);
+        for (int i = 0; i < n; i++) {
+            int cur = i * x[i].first - left;
+            cur += sfx[i] - (n - i - 1) * (x[i].first - 1);
+            left += x[i].first - 1; // ranges are inclusive
+            cur++; // because [x_i, x_i]
+
+            ans[x[i].second] = cur;
+        }
+
+        for (int& a : ans) {
+            cout << a << ' ';
+        }
+        cout << '\n';
     }
 }
