@@ -19,7 +19,7 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int BIG = 1e10;
+const int INF = 1e10;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -28,35 +28,30 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int w, f, n;
-        cin >> w >> f >> n;
-        vector<int> s(n);
-        int totcost = 0;
-        for (int& x : s) {cin >> x; totcost += x;}
+        int n, m, k;
+        cin >> n >> m >> k;
+        string riv;
+        cin >> riv;
+        riv = 'L' + riv;
 
-        // build up fire/water for ans # of seconds, then cast all spells at once
-        vector<bool> dp(totcost + 1);
-        dp[0] = 1;
+        vector<int> dp(n + 2, INF);
+        dp[0] = 0;
 
-        // find reachable sums
-        for (int& m : s) {
-            for (int i = totcost; i - m >= 0; i--) {
-                dp[i] = dp[i] || dp[i - m];
+        for (int i = 0; i <= n; i++) {
+            if (dp[i] != INF && riv[i] != 'C') {
+                if (riv[i] == 'W') {
+                    dp[i]++;
+                    dp[i + 1] = min(dp[i + 1], dp[i]);
+                }
+                else {
+                    for (int j = 1; j <= m; j++) {
+                        if (i + j > n + 1) break;
+                        dp[i + j] = min(dp[i + j], dp[i]);
+                    }
+                }
             }
         }
 
-        int ans = BIG;
-        for (int i = 0; i <= totcost; i++) {
-            // if we want to fill dp[i] with water
-            // what is the cost?
-            if (dp[i]) {
-                ans = min(ans, max(
-                    (i + w - 1) / w,
-                    (totcost - i + f - 1) / f
-                ));
-            }
-        }
-
-        cout << ans << '\n';
+        cout << (dp[n + 1] != INF && dp[n + 1] <= k ? "YES\n" : "NO\n");
     }
 }

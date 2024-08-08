@@ -19,7 +19,37 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int BIG = 1e10;
+int ask(int a, int b) {
+    cout << "? " << a << ' ' << b << endl;
+    int x;
+    cin >> x;
+    return x;
+}
+
+void solve() {
+    // idea: 3^7 > 1000, so we can use 2 dimensions to ternary search for x
+
+    int l = 2, r = 999;
+    while (l != r) {
+        int mid1 = l + (r - l) / 3;
+        int mid2 = r - (r - l) / 3;
+
+        int actual = ask(mid1, mid2);
+
+        if (actual == mid1 * mid2) {
+            l = mid2 + 1;
+        }
+        else if (actual == mid1 * (mid2 + 1)) {
+            l = mid1 + 1;
+            r = mid2;
+        }
+        else {
+            r = mid1;
+        }
+    }
+
+    cout << "! " << l << endl;
+}
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -28,35 +58,6 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int w, f, n;
-        cin >> w >> f >> n;
-        vector<int> s(n);
-        int totcost = 0;
-        for (int& x : s) {cin >> x; totcost += x;}
-
-        // build up fire/water for ans # of seconds, then cast all spells at once
-        vector<bool> dp(totcost + 1);
-        dp[0] = 1;
-
-        // find reachable sums
-        for (int& m : s) {
-            for (int i = totcost; i - m >= 0; i--) {
-                dp[i] = dp[i] || dp[i - m];
-            }
-        }
-
-        int ans = BIG;
-        for (int i = 0; i <= totcost; i++) {
-            // if we want to fill dp[i] with water
-            // what is the cost?
-            if (dp[i]) {
-                ans = min(ans, max(
-                    (i + w - 1) / w,
-                    (totcost - i + f - 1) / f
-                ));
-            }
-        }
-
-        cout << ans << '\n';
+        solve();
     }
 }
