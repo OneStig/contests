@@ -26,43 +26,23 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        cin >> n >> k;
-        vector<int> a(n);
+        int n;
+        cin >> n;
 
-        int ans = 0;
-        for (int& x : a) { cin >> x; ans = max(ans, x); }
+        vector<string> grid(n);
+        for (string& s : grid) cin >> s;
 
-        int cap = a.back() + 1;
-
+        bool yes = 1;
         for (int i = n - 2; i >= 0; i--) {
-            if (a[i] < cap) {
-                int l = a[i], r = cap;
-
-                while (l < r) {
-                    int mid = (l + r + 1) / 2;
-                    int cost = mid - a[i];
-                    int needed = mid - 1;
-                    for (int j = i + 1; a[j] < needed; j++, needed--) {
-                        // cap should prevent loop from exceeding
-                        cost += needed - a[j];
-                    }
-
-                    // dbg(l, r, cost, k);
-                    if (cost > k) {
-                        r = mid - 1;
-                    }
-                    else {
-                        l = mid;
-                    }
+            if (!yes) break;
+            for (int j = n - 2; j >= 0; j--) {
+                if (grid[i][j] == '1' && grid[i + 1][j] == '0' && grid[i][j + 1] == '0') {
+                    yes = 0;
+                    break;
                 }
-
-                ans = max(ans, l);
             }
-
-            cap = max(cap + 1, a[i] + 1);
         }
 
-        cout << ans << '\n';
+        cout << (yes ? "YES" : "NO") << '\n';
     }
 }

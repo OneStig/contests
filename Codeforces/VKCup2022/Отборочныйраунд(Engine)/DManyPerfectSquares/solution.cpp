@@ -19,6 +19,25 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    for(int& x : a) cin >> x;
+
+    // regardless of x, relative distances in a doesn't change
+    // idea: pick i, j i < j, try to find 2 squares with same gap as a[i], a[j]
+
+    int ans = 1;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int gap = a[j] - a[i];
+        }
+    }
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,18 +45,6 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-
-        for (int i = 1; i <= n; i++) {
-            if (i >= y && i <= x) {
-                cout << 1 << ' ';
-            }
-            else {
-                cout << -1 << ' ';
-            }
-        }
-
-        cout << '\n';
+        solve();
     }
 }

@@ -26,41 +26,16 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        cin >> n >> k;
-        vector<int> a(n);
+        int n;
+        string s;
+        cin >> n >> s;
 
-        int ans = 0;
-        for (int& x : a) { cin >> x; ans = max(ans, x); }
+        int ans = n - 1;
 
-        int cap = a.back() + 1;
-
-        for (int i = n - 2; i >= 0; i--) {
-            if (a[i] < cap) {
-                int l = a[i], r = cap;
-
-                while (l < r) {
-                    int mid = (l + r + 1) / 2;
-                    int cost = mid - a[i];
-                    int needed = mid - 1;
-                    for (int j = i + 1; a[j] < needed; j++, needed--) {
-                        // cap should prevent loop from exceeding
-                        cost += needed - a[j];
-                    }
-
-                    // dbg(l, r, cost, k);
-                    if (cost > k) {
-                        r = mid - 1;
-                    }
-                    else {
-                        l = mid;
-                    }
-                }
-
-                ans = max(ans, l);
+        for (int i = 1; i < n - 1; i++) {
+            if (s[i - 1] == s[i + 1]) {
+                ans--;
             }
-
-            cap = max(cap + 1, a[i] + 1);
         }
 
         cout << ans << '\n';

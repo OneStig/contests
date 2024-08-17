@@ -22,22 +22,41 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
 
-    while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
+    vector<int> a(n);
+    for (int& x : a) cin >> x;
 
-        for (int i = 1; i <= n; i++) {
-            if (i >= y && i <= x) {
-                cout << 1 << ' ';
-            }
-            else {
-                cout << -1 << ' ';
-            }
+    vector<array<int, 2> > sfx(n); // sfx cost and individual new
+    sfx[n - 1][1] = a[n - 1];
+    sfx[n - 1][0] = 0;
+
+    for (int i = n - 2; i >= 0; i--) {
+        sfx[i][0] = sfx[i + 1][0];
+
+        if (a[i] <= sfx[i + 1][1]) {
+            sfx[i][1] = sfx[i + 1][1] + 1;
+            sfx[i][0] += sfx[i + 1][1] + 1 - a[i];
+        }
+        else {
+            sfx[i][1] = a[i];
+        }
+    }
+
+    int ans = sfx[0][0], pfx = 0;
+
+    for (int i = 1; i < n; i++) {
+        int cur = sfx[i][0] + pfx;
+        if (a[i - 1] + 1> sfx[i][1]) {
+            cur += a[i - 1] + 1 - sfx[i][1];
         }
 
-        cout << '\n';
+        ans = min(ans, cur);
+        int newa = max(a[i - 1] + 1, a[i]);
+        pfx += newa - a[i];
+        a[i] = newa;
     }
+
+    cout << ans << '\n';
 }

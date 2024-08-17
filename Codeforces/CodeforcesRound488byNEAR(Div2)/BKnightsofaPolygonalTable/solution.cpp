@@ -22,22 +22,38 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, k;
+    cin >> n >> k;
 
-    while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
+    vector<int> coins(n);
+    vector<pair<int, int> > kpow(n);
 
-        for (int i = 1; i <= n; i++) {
-            if (i >= y && i <= x) {
-                cout << 1 << ' ';
-            }
-            else {
-                cout << -1 << ' ';
-            }
-        }
-
-        cout << '\n';
+    for (int i = 0; i < n; i++) {
+        cin >> kpow[i].first;
+        kpow[i].second = i;
     }
+
+    for (int& c : coins) cin >> c;
+
+    sort(all(kpow));
+
+    vector<int> ans(n);
+    priority_queue<int> ks;
+    int ksum = 0;
+    for (int i = 0; i < n; i++) {
+        int cur = coins[kpow[i].second];
+        ans[kpow[i].second] = cur + ksum;
+
+        ksum += cur;
+        ks.push(-cur);
+        if (sz(ks) > k) {
+            ksum += ks.top();
+            ks.pop();
+        }
+    }
+
+    for (int& x : ans) {
+        cout << x << ' ';
+    }
+    cout << '\n';
 }

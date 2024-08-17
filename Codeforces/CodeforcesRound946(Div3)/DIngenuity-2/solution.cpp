@@ -26,41 +26,44 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, k;
-        cin >> n >> k;
-        vector<int> a(n);
+        int n;
+        string s;
+        cin >> n >> s;
 
-        int ans = 0;
-        for (int& x : a) { cin >> x; ans = max(ans, x); }
+        int north{}, south{}, east{}, west{};
 
-        int cap = a.back() + 1;
+        for (char c : s) {
+            if (c == 'N') north++;
+            else if (c == 'S') south++;
+            else if (c == 'E') east++;
+            else west++;
+        }
 
-        for (int i = n - 2; i >= 0; i--) {
-            if (a[i] < cap) {
-                int l = a[i], r = cap;
+        dbg(north, south, east, west);
 
-                while (l < r) {
-                    int mid = (l + r + 1) / 2;
-                    int cost = mid - a[i];
-                    int needed = mid - 1;
-                    for (int j = i + 1; a[j] < needed; j++, needed--) {
-                        // cap should prevent loop from exceeding
-                        cost += needed - a[j];
-                    }
+        if ((north + south) % 2 == 1 || (east + west) % 2 == 1 ||
+            s == "NS" || s == "SN" || s == "EW" || s == "WE") {
+            cout << "NO" << '\n';
+            continue;
+        }
 
-                    // dbg(l, r, cost, k);
-                    if (cost > k) {
-                        r = mid - 1;
-                    }
-                    else {
-                        l = mid;
-                    }
-                }
+        string ans = "";
 
-                ans = max(ans, l);
+        int nc{}, sc{}, ec{}, wc{};
+
+        for (char c : s) {
+            if ((c == 'N' && nc % 2 == 0) || (c == 'S' && sc % 2 == 0) ||
+                (c == 'E' && ec % 2 == 1) || (c == 'W' && wc % 2 == 1)) {
+                ans += "R";
+            }
+            else {
+                ans += "H";
             }
 
-            cap = max(cap + 1, a[i] + 1);
+            if (c == 'N') nc++;
+            else if (c == 'S') sc++;
+            else if (c == 'E') ec++;
+            else wc++;
         }
 
         cout << ans << '\n';
