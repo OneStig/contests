@@ -19,19 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-bitset<3> dp[201][201][201];
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
-    int n;
-    string s;
-    cin >> n >> s;
-    int r, g, b;
-
-    for (char c : s) {
-        if (c == 'R') r++;
-        else if (c == 'G') g++;
-        else b++;
-    }
 }

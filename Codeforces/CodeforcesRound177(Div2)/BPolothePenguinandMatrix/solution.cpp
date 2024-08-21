@@ -19,19 +19,28 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-bitset<3> dp[201][201][201];
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n;
-    string s;
-    cin >> n >> s;
-    int r, g, b;
+    int n, m, d;
+    cin >> n >> m >> d;
+    vector<int> a(n * m);
+    for (int& x : a) cin >> x;
 
-    for (char c : s) {
-        if (c == 'R') r++;
-        else if (c == 'G') g++;
-        else b++;
+    sort(all(a));
+
+    int target = a[n * m / 2];
+
+    int ans = 0;
+    for (int i = 0; i < n * m; i++) {
+        if (a[i] % d != target % d) {
+            ans = -1;
+            break;
+        }
+
+        dbg(a[i], target);
+        ans += abs(a[i] - target) / d;
     }
+
+    cout << ans << '\n';
 }
