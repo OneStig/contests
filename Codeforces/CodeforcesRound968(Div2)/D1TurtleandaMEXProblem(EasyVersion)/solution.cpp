@@ -22,9 +22,43 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k, q;
-    cin >> n >> m >> k >> q;
+    int t;
+    cin >> t;
 
-    vector<vector<int>> a(n);
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
 
+        int best = 0;
+        for (int i = 0; i < n; i++) {
+            int l;
+            cin >> l;
+            set<int> a;
+            while (l--) {
+                int x;
+                cin >> x;
+                a.insert(x);
+            }
+
+            bool seen = 0;
+            for (int i = 0; 1; i++) {
+                if (a.find(i) == a.end()) {
+                    if (seen) {
+                        best = max(best, i);
+                        break;
+                    }
+
+                    seen = 1;
+                }
+            }
+        }
+
+        int ans = (min(m, best) + 1) * best;
+
+        if (m > best) {
+            ans += m * (m + 1) / 2 - best * (best + 1) / 2;
+        }
+
+        cout << ans << '\n';
+    }
 }

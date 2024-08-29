@@ -21,10 +21,4 @@ typedef int uci;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
-    int n, m, k, q;
-    cin >> n >> m >> k >> q;
-
-    vector<vector<int>> a(n);
-
 }
