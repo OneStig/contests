@@ -19,11 +19,17 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int ask(int x) {
-    cout << "- " << x << endl;
-    int cnt;
-    cin >> cnt;
-    return cnt;
+void solve() {
+    int n, w;
+    cin >> n >> w;
+
+    vector<int> par(n);
+    vector<vector<int>> adj(n);
+
+    for (int i = 1; i < n; i++) {
+        int p;
+        cin >> p;
+    }
 }
 
 uci main() {
@@ -33,22 +39,6 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int subbed{}, cnt;
-        cin >> cnt;
-        for (int i = 0; i < 30; i++) {
-            if (cnt == 0) break;
-
-            int test{};
-            for (int j = 0; j < cnt; j++) {
-                test += 1 << j;
-            }
-            ask(test);
-            subbed += test;
-        }
-
-        cout << "! " << subbed << endl;
+        solve();
     }
 }
-
-// first ask 0001
-// if 0010 -> 0001

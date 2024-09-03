@@ -19,36 +19,55 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int ask(int x) {
-    cout << "- " << x << endl;
-    int cnt;
-    cin >> cnt;
-    return cnt;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    vector<int> fib(46);
+    fib[0] = 1;
+    fib[1] = 1;
+    for (int i = 2; i < sz(fib); i++) {
+        fib[i] = fib[i - 1] + fib[i - 2];
+    }
 
     int t;
     cin >> t;
 
     while (t--) {
-        int subbed{}, cnt;
-        cin >> cnt;
-        for (int i = 0; i < 30; i++) {
-            if (cnt == 0) break;
+        int n, x, y;
+        cin >> n >> x >> y;
 
-            int test{};
-            for (int j = 0; j < cnt; j++) {
-                test += 1 << j;
+        string ans = "YES";
+        int w = fib[n], h = fib[n + 1];
+
+        while (w != 1 && h != 1) {
+            if (h > w) {
+                if (y <= h - w) {
+                    h -= w;
+                }
+                else if (y > w) {
+                    h -= w;
+                    y -= w;
+                }
+                else {
+                    ans = "NO";
+                    break;
+                }
             }
-            ask(test);
-            subbed += test;
+            else {
+                if (x <= w - h) {
+                    w -= h;
+                }
+                else if (x > h) {
+                    w -= h;
+                    x -= h;
+                }
+                else {
+                    ans = "NO";
+                    break;
+                }
+            }
         }
 
-        cout << "! " << subbed << endl;
+        cout << ans << '\n';
     }
 }
-
-// first ask 0001
-// if 0010 -> 0001

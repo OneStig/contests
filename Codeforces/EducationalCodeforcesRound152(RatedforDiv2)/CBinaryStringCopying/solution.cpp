@@ -19,13 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int ask(int x) {
-    cout << "- " << x << endl;
-    int cnt;
-    cin >> cnt;
-    return cnt;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -33,22 +26,43 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int subbed{}, cnt;
-        cin >> cnt;
-        for (int i = 0; i < 30; i++) {
-            if (cnt == 0) break;
+        string s;
+        int n, m;
+        cin >> n >> m >> s;
 
-            int test{};
-            for (int j = 0; j < cnt; j++) {
-                test += 1 << j;
+        bool same = 0;
+        set<pair<int, int>> unique;
+        vector<int> ones(n), zeros(n);
+
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '0') zeros[i] = i;
+            else {
+                if (i == 0) zeros[i] = -1;
+                else zeros[i] = zeros[i - 1];
             }
-            ask(test);
-            subbed += test;
         }
 
-        cout << "! " << subbed << endl;
+        for (int i = n - 1; i >= 0; i--) {
+            if (s[i] == '1') ones[i] = i;
+            else {
+                if (i == n - 1) ones[i] = n;
+                else ones[i] = ones[i + 1];
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            int l, r;
+            cin >> l >> r;
+            l--, r--;
+
+            if (r == l || ones[l] > r || zeros[r] < l || ones[l] > zeros[r]) {
+                same = 1;
+            }
+            else {
+                unique.insert({ones[l], zeros[r]});
+            }
+        }
+
+        cout << sz(unique) + same << '\n';
     }
 }
-
-// first ask 0001
-// if 0010 -> 0001

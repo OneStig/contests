@@ -19,13 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int ask(int x) {
-    cout << "- " << x << endl;
-    int cnt;
-    cin >> cnt;
-    return cnt;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -33,22 +26,32 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int subbed{}, cnt;
-        cin >> cnt;
-        for (int i = 0; i < 30; i++) {
-            if (cnt == 0) break;
+        int n;
+        cin >> n;
 
-            int test{};
-            for (int j = 0; j < cnt; j++) {
-                test += 1 << j;
-            }
-            ask(test);
-            subbed += test;
+        map<int, int> frogs;
+
+        for (int i = 0; i < n; i++) {
+            int a;
+            cin >> a;
+            frogs[a]++;
         }
 
-        cout << "! " << subbed << endl;
+        int ans{};
+        for (int i = 1; i <= n; i++) {
+            int cur{};
+            for (int f = 1; f <= sqrt(i); f++) {
+                if (i % f == 0) {
+                    cur += frogs[f];
+                    if (f != i / f) {
+                        cur += frogs[i / f];
+                    }
+                }
+            }
+
+            ans = max(ans, cur);
+        }
+
+        cout << ans << '\n';
     }
 }
-
-// first ask 0001
-// if 0010 -> 0001

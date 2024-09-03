@@ -19,13 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int ask(int x) {
-    cout << "- " << x << endl;
-    int cnt;
-    cin >> cnt;
-    return cnt;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -33,22 +26,38 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int subbed{}, cnt;
-        cin >> cnt;
-        for (int i = 0; i < 30; i++) {
-            if (cnt == 0) break;
+        string s, l, r;
+        int m;
+        cin >> s >> m >> l >> r;
 
-            int test{};
-            for (int j = 0; j < cnt; j++) {
-                test += 1 << j;
+        // int combs = 1;
+        // for (int i = 0; i < m; i++) {
+        //     combs *= r[i] - l[i] + 1;
+        // }
+
+        int layer{}, layerc{};
+        vector<bool> cur(10);
+        for (char& c : s) {
+            if (layer >= m) break;
+            if (l[layer] <= c && c <= r[layer]) {
+                if (!cur[c - '0']) {
+                    cur[c - '0'] = 1;
+                    layerc++;
+                }
+
+                if (layerc == r[layer] - l[layer] + 1) {
+                    layer++;
+                    layerc = 0;
+                    cur = vector<bool>(10);
+                }
             }
-            ask(test);
-            subbed += test;
         }
 
-        cout << "! " << subbed << endl;
+        if (layer == m) {
+            cout << "NO\n";
+        }
+        else {
+            cout << "YES\n";
+        }
     }
 }
-
-// first ask 0001
-// if 0010 -> 0001

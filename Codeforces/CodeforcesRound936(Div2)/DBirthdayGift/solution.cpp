@@ -19,13 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-int ask(int x) {
-    cout << "- " << x << endl;
-    int cnt;
-    cin >> cnt;
-    return cnt;
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -33,22 +26,9 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int subbed{}, cnt;
-        cin >> cnt;
-        for (int i = 0; i < 30; i++) {
-            if (cnt == 0) break;
-
-            int test{};
-            for (int j = 0; j < cnt; j++) {
-                test += 1 << j;
-            }
-            ask(test);
-            subbed += test;
-        }
-
-        cout << "! " << subbed << endl;
+        int n, x;
+        cin >> n >> x;
+        vector<int> a(n);
+        for (int &x : a) cin >> x;
     }
 }
-
-// first ask 0001
-// if 0010 -> 0001

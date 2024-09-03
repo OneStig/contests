@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cmath>
 
 using namespace std;
 
@@ -19,6 +20,22 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_A = 1e4;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+        int len = log10(n) + 1;
+        dbg(n, len);
+
+        for (int a = 1; a <= MAX_A; a++) {
+            // binary search for b?
+        }
+    }
 }
