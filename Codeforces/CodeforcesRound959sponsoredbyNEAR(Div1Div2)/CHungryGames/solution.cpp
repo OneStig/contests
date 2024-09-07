@@ -26,44 +26,31 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, x;
+        cin >> n >> x;
 
         vector<int> a(n + 1), dp(n + 1);
         for (int i = 1; i <= n; i++) {
             cin >> a[i];
+            a[i] += a[i - 1];
         }
 
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
+        int ans{}; // counts # of bad intervals
+        for (int l = n; l >= 1; l--) {
+            auto r = upper_bound(all(a), a[l - 1] + x);
 
-            if (a[i] != 0) {
-                dp[i]++;
-            }
+            if (r != a.end()) {
+                dp[l] = 1;
+                auto nxt = next(r);
 
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
+                if (nxt != a.end()) {
+                    dp[l] += dp[nxt - a.begin()];
+                }
 
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
-            }
-            else {
-                streak = 0;
+                ans += dp[l];
             }
         }
 
-        cout << dp[n] << '\n';
+        cout << n * (n + 1) / 2 - ans << '\n';
     }
 }
-
-// xx
-// xxxx
-// xxxx
-// xx

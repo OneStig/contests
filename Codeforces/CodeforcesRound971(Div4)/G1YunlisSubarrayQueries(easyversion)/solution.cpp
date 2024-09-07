@@ -26,44 +26,50 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, k, q;
+        cin >> n >> k >> q;
 
-        vector<int> a(n + 1), dp(n + 1);
-        for (int i = 1; i <= n; i++) {
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
             cin >> a[i];
+            a[i] -= i;
         }
 
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
-
-            if (a[i] != 0) {
-                dp[i]++;
-            }
-
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
-
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
-            }
-            else {
-                streak = 0;
-            }
+        vector<int> ans(n);
+        map<int, int> count;
+        map<int, int> vals;
+        for (int i = 0; i < k; i++) {
+            count[a[i]]++;
         }
 
-        cout << dp[n] << '\n';
+        for (auto [x, y] : count) {
+            vals[y]++;
+        }
+
+        ans[k - 1] = prev(vals.end())->first;
+
+        for (int i = k; i < n; i++) {
+            if (--vals[count[a[i - k]]] == 0) {
+                vals.erase(count[a[i - k]]);
+            }
+            count[a[i - k]]--;
+            vals[count[a[i - k]]]++;
+
+            if (--vals[count[a[i]]] == 0) {
+                vals.erase(count[a[i]]);
+            }
+            count[a[i]]++;
+            vals[count[a[i]]]++;
+
+            ans[i] = prev(vals.end())->first;
+        }
+
+        while (q--) {
+            int l, r;
+            cin >> l >> r;
+            r--;
+
+            cout << k - ans[r] << '\n';
+        }
     }
 }
-
-// xx
-// xxxx
-// xxxx
-// xx

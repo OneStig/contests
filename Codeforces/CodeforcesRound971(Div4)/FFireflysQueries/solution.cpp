@@ -26,44 +26,28 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, q;
+        cin >> n >> q;
 
-        vector<int> a(n + 1), dp(n + 1);
+        vector<int> a(2 * n + 1);
         for (int i = 1; i <= n; i++) {
             cin >> a[i];
+            a[i + n] = a[i];
         }
 
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
-
-            if (a[i] != 0) {
-                dp[i]++;
-            }
-
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
-
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
-            }
-            else {
-                streak = 0;
-            }
+        for (int i = 1; i <= 2 * n; i++) {
+            a[i] += a[i - 1];
         }
 
-        cout << dp[n] << '\n';
+        while (q--) {
+            int l, r;
+            cin >> l >> r;
+            int lg = (l - 1) / n, rg = (r - 1) / n;
+            l = (l - 1) % n + 1 + lg, r = (r - 1) % n + 1 + rg;
+
+            int ans = (rg - lg - 1) * a[n] + a[n + lg] - a[l - 1] + a[r] - a[rg];
+
+            cout << ans << '\n';
+        }
     }
 }
-
-// xx
-// xxxx
-// xxxx
-// xx

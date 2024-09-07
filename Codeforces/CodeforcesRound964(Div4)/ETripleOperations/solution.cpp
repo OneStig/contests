@@ -19,51 +19,33 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_R = 2e5;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
     int t;
     cin >> t;
 
+    vector<int> nums(MAX_R + 1), pfx(MAX_R + 1);
+
+    for (int i = 1; i <= MAX_R; i++) {
+        int cur = i;
+        while (cur != 0) {
+            cur /= 3;
+            nums[i]++;
+        }
+
+        pfx[i] = nums[i] + pfx[i - 1];
+    }
+
     while (t--) {
-        int n;
-        cin >> n;
+        int l, r;
+        cin >> l >> r;
 
-        vector<int> a(n + 1), dp(n + 1);
-        for (int i = 1; i <= n; i++) {
-            cin >> a[i];
-        }
-
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
-
-            if (a[i] != 0) {
-                dp[i]++;
-            }
-
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
-
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
-            }
-            else {
-                streak = 0;
-            }
-        }
-
-        cout << dp[n] << '\n';
+        int ans = pfx[r] - pfx[l - 1] + nums[l];
+        cout << ans << '\n';
     }
 }
 
-// xx
-// xxxx
-// xxxx
-// xx
+// 1, 2, 3 -> 0, 6, 3 -> 0, 2, 3 -> 0, 0, 3 -> 0, 0, 1 -> 0, 0, 0

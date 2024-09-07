@@ -19,6 +19,8 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int INF = 1e6;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,44 +28,38 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        string s;
+        cin >> s;
 
-        vector<int> a(n + 1), dp(n + 1);
-        for (int i = 1; i <= n; i++) {
-            cin >> a[i];
+        bool yes = 1;
+        int sorted = 1, unsorted = INF, len = 0;
+        for (char c : s) {
+            if (c == '+') {
+                len++;
+            }
+            else if (c == '-') {
+                if (unsorted == len) unsorted = INF;
+                if (sorted == len) sorted = max(1ll, len - 1);
+                len--;
+            }
+            else if (c == '1') {
+                if (len >= 2 && unsorted <= len) {
+                    yes = 0;
+                    break;
+                }
+
+                sorted = max(1ll, len);
+            }
+            else if (c == '0') {
+                if (len < 2 || sorted == len) {
+                    yes = 0;
+                    break;
+                }
+
+                unsorted = min(unsorted, len);
+            }
         }
 
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
-
-            if (a[i] != 0) {
-                dp[i]++;
-            }
-
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
-
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
-            }
-            else {
-                streak = 0;
-            }
-        }
-
-        cout << dp[n] << '\n';
+        cout << (yes ? "YES" : "NO") << '\n';
     }
 }
-
-// xx
-// xxxx
-// xxxx
-// xx

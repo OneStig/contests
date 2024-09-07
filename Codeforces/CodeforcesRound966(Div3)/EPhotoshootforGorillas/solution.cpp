@@ -26,44 +26,32 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, m, k, w;
+        cin >> n >> m >> k >> w;
 
-        vector<int> a(n + 1), dp(n + 1);
+        vector<int> a(w);
+        for (int& x : a) cin >> x;
+
+        vector<int> spots;
+        spots.reserve(n * m);
         for (int i = 1; i <= n; i++) {
-            cin >> a[i];
-        }
-
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
-
-            if (a[i] != 0) {
-                dp[i]++;
-            }
-
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
-
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
-            }
-            else {
-                streak = 0;
+            for (int j = 1; j <= m; j++) {
+                int l = max(1ll, i - k + 1), r = min(i, n - k + 1);
+                int horiz = r - l + 1;
+                int d = max(1ll, j - k + 1), u = min(j, m - k + 1);
+                int vert = u - d + 1;
+                spots.push_back(horiz * vert);
             }
         }
 
-        cout << dp[n] << '\n';
+        sort(spots.rbegin(), spots.rend());
+        sort(a.rbegin(), a.rend());
+
+        int ans{};
+        for (int i = 0; i < w; i++) {
+            ans += spots[i] * a[i];
+        }
+
+        cout << ans << '\n';
     }
 }
-
-// xx
-// xxxx
-// xxxx
-// xx

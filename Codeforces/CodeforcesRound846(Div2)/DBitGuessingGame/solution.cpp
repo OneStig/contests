@@ -33,20 +33,26 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int subbed{}, cnt;
-        cin >> cnt;
+        int ans{}, flip{}, prev;
+        cin >> prev;
+
+        int guess = 1;
         for (int i = 0; i < 30; i++) {
-            if (cnt == 0) break;
+            int cnt = ask(guess);
+
+
+
+            if (cnt == 0) {
+
+            }
 
             int test{};
             for (int j = 0; j < cnt; j++) {
                 test += 1 << j;
             }
             ask(test);
-            subbed += test;
         }
 
-        cout << "! " << subbed << endl;
     }
 }
 

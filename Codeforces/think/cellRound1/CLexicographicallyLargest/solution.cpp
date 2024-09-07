@@ -19,6 +19,49 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+void solve() {
+    int n;
+    cin >> n;
+
+    set<int> used, unused;
+    unused.insert(-1);
+
+    for (int i = 1; i <= n; i++) {
+        int x;
+        cin >> x;
+        x += i;
+
+        int orig = x;
+
+        if (used.contains(x)) {
+            x = *(prev(unused.upper_bound(x)));
+            if (orig - x <= i - 1) {
+                used.insert(x);
+                unused.erase(x);
+                if (x > 2 && !used.contains(x - 1)) {
+                    unused.insert(x - 1);
+                }
+            }
+        }
+        else {
+            used.insert(x);
+
+            if (unused.contains(x)) {
+                unused.erase(x);
+            }
+
+            if (x > 2 && !used.contains(x - 1)) {
+                unused.insert(x - 1);
+            }
+        }
+    }
+
+    for (auto it = used.rbegin(); it != used.rend(); it++) {
+        cout << *it << ' ';
+    }
+    cout << '\n';
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,11 +69,9 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x;
-        cin >> n >> x;
-        x++;
-
-        vector<int> a(n);
-        for (int &x : a) cin >> x;
+        solve();
     }
 }
+
+// First ensure maximum possible, then most unique elements
+// what if there are multiple ways to make it?

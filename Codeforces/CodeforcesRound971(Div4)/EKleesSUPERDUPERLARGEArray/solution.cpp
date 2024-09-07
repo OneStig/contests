@@ -19,6 +19,8 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int INF = 1e18;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,44 +28,28 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, k;
+        cin >> n >> k;
 
-        vector<int> a(n + 1), dp(n + 1);
-        for (int i = 1; i <= n; i++) {
-            cin >> a[i];
-        }
+        int ans = INF;
+        int l = 0, r = n - 1;
+        while (l <= r) {
+            int mid = (l + r) / 2;
 
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
+            int cur = ((k + mid + 1) * (k + mid) / 2 - k * (k - 1) / 2)
+                    - ((k + n - 1) * (k + n) / 2 - (k + mid + 1) * (k + mid) / 2);
 
-            if (a[i] != 0) {
-                dp[i]++;
-            }
+            ans = min(ans, abs(cur));
 
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
-
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
+            if (cur == 0) break;
+            if (cur < 0) {
+                l = mid + 1;
             }
             else {
-                streak = 0;
+                r = mid - 1;
             }
         }
 
-        cout << dp[n] << '\n';
+        cout << ans << '\n';
     }
 }
-
-// xx
-// xxxx
-// xxxx
-// xx

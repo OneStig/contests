@@ -29,41 +29,30 @@ uci main() {
         int n;
         cin >> n;
 
-        vector<int> a(n + 1), dp(n + 1);
-        for (int i = 1; i <= n; i++) {
-            cin >> a[i];
+        priority_queue<int, vector<int>, greater<int>> s;
+        int last = -1;
+        for (int i = 0; i < n; i++) {
+            int x;
+            cin >> x;
+
+            for (int j = last + 1; j < x; j++) {
+                if (sz(s) > 2 * n) break;
+                s.push(j);
+            }
+
+            last = x;
         }
 
-        int streak{};
-        for (int i = 1; i <= n; i++) {
-            dp[i] = dp[i - 1];
-
-            if (a[i] != 0) {
-                dp[i]++;
-            }
-
-            if (i != 1) {
-                int subgrids = (max(a[i], a[i - 1]) + 1) / 2;
-                dp[i] = min(dp[i], dp[i - 2] + subgrids);
-            }
-
-            if (a[i] <= 2 && streak >= 2 && streak % 2 == 0 && i - streak >= 2 && a[i - streak - 1] <= 2) {
-                dp[i] = min(dp[i], dp[i - streak - 2] + streak + 1);
-            }
-
-            if (a[i] == 3 || a[i] == 4) {
-                streak++;
-            }
-            else {
-                streak = 0;
-            }
+        while (sz(s) <= 2 * n) {
+            s.push(++last);
         }
 
-        cout << dp[n] << '\n';
+        int y = -3;
+        while (y != -1) {
+            cout << s.top() << endl;
+            s.pop();
+            cin >> y;
+            s.push(y);
+        }
     }
 }
-
-// xx
-// xxxx
-// xxxx
-// xx
