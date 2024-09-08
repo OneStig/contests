@@ -21,6 +21,58 @@ typedef int uci;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<int> a(n);
+        priority_queue<int> big;
+        for (int& x : a) {
+            cin >> x;
+            big.push(x);
+        }
+
+        bool possib = 1;
+        map<int, vector<int>> perm;
+        int pos{}, neg{};
+        for (int i = n; i >= 1; i--) {
+            int testpos = pos + i;
+            dbg(i, pos, neg, testpos);
+            if (big.top() > testpos) {
+                possib = 0;
+                break;
+            }
+
+            if (big.top() == testpos) {
+                big.pop();
+                perm[testpos].push_back(i);
+                pos++;
+            }
+            else if (big.top() == pos) {
+                big.pop();
+                perm[pos].push_back(-i);
+                neg++;
+            }
+            else {
+                possib = 0;
+                break;
+            }
+        }
+
+        if (possib) {
+            cout << "YES\n";
+        }
+        else {
+            cout << "NO\n";
+        }
+    }
 }
 
-//
+// "permutation" of n, where each could be pos or negative
+
+// if the largest a == n, then n is positive instead of negative
+// otherwise, it must be negative

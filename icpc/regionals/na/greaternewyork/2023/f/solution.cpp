@@ -80,6 +80,8 @@ uci main() {
             if (!exists) continue;
             int robotx = fixx + rel[rot][0].f, roboty = fixy + rel[rot][0].s;
 
+            if (forest[robotx].contains(roboty)) continue;
+
             int inrange{};
             for (auto& pt : points) {
                 if (abs(robotx - pt.f) + abs(roboty - pt.s) <= rmax) {
@@ -87,6 +89,10 @@ uci main() {
                 }
 
                 if (inrange > ns) break;
+            }
+
+            if (fix == 2 && rot == 0) {
+                dbg(inrange);
             }
 
             if (inrange == ns) {
