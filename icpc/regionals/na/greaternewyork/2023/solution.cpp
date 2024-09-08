@@ -21,32 +21,4 @@ typedef int uci;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
-    int n, q;
-    cin >> n >> q;
-    map<int, int> d;
-
-    while (n--) {
-        int l, r, v;
-        cin >> l >> r >> v;
-        d[l] += v;
-        d[r] -= v;
-    }
-
-    vector<int> pfx;
-    map<int, int> coord;
-    int cur{};
-    for (auto [x, val] : d) {
-        cur += val;
-        coord[x] = sz(pfx);
-        pfx.push_back(cur);
-    }
-
-    dbg(coord);
-    dbg(pfx);
-
-    while (q--) {
-        int l, r;
-        cin >> l >> r;
-    }
 }

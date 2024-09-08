@@ -22,31 +22,16 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, q;
-    cin >> n >> q;
-    map<int, int> d;
+    vector<int> a(10);
+    for (int& x : a) cin >> x;
 
-    while (n--) {
-        int l, r, v;
-        cin >> l >> r >> v;
-        d[l] += v;
-        d[r] -= v;
+    int sum{};
+    for (int i = 0; i < 10; i += 2) {
+        sum += a[i] * a[i + 1];
     }
+    sum /= 5;
+    int n, kwf;
+    cin >> n >> kwf;
 
-    vector<int> pfx;
-    map<int, int> coord;
-    int cur{};
-    for (auto [x, val] : d) {
-        cur += val;
-        coord[x] = sz(pfx);
-        pfx.push_back(cur);
-    }
-
-    dbg(coord);
-    dbg(pfx);
-
-    while (q--) {
-        int l, r;
-        cin >> l >> r;
-    }
+    cout << sum * n / kwf << '\n';
 }
