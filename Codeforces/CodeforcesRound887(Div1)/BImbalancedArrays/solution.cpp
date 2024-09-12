@@ -41,7 +41,6 @@ uci main() {
         int pos{}, neg{};
         for (int i = n; i >= 1; i--) {
             int testpos = pos + i;
-            dbg(i, pos, neg, testpos);
             if (big.top() > testpos) {
                 possib = 0;
                 break;
@@ -52,19 +51,34 @@ uci main() {
                 perm[testpos].push_back(i);
                 pos++;
             }
-            else if (big.top() == pos) {
-                big.pop();
+            else {
                 perm[pos].push_back(-i);
                 neg++;
-            }
-            else {
-                possib = 0;
-                break;
             }
         }
 
         if (possib) {
-            cout << "YES\n";
+            vector<int> ans(n);
+            for (int i = 0; i < n; i++) {
+                if (perm[a[i]].empty()) {
+                    possib = 0;
+                    break;
+                }
+
+                ans[i] = perm[a[i]].back();
+                perm[a[i]].pop_back();
+            }
+
+            if (possib) {
+                cout << "YES\n";
+                for (int& x : ans) {
+                    cout << x << ' ';
+                }
+                cout << '\n';
+            }
+            else {
+                cout << "NO\n";
+            }
         }
         else {
             cout << "NO\n";

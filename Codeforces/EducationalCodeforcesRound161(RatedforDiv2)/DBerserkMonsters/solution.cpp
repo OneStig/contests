@@ -28,30 +28,49 @@ uci main() {
     while (t--) {
         int n;
         cin >> n;
-        vector<int> a(n);
-        set<int> remain;
+
+        vector<int> a(n), d(n), l(n), r(n);
+        for (int& x : a) cin >> x;
+        for (int& x : d) cin >> x;
+
+        set<int> cands;
         for (int i = 0; i < n; i++) {
-            cin >> a[i];
-            remain.insert(i);
+            cands.insert(i);
+            l[i] = i - 1;
+            r[i] = i + 1;
         }
 
-        vector<pair<int, int>> ans;
+        for (int rnd = 0; rnd < n; rnd++) {
+            vector<int> dead;
 
-        for (int x = n - 1; x > 0; x--) {
-            vector<int> mods(x, -1);
+            for (int cur : cands) {
+                int dmg{};
+                if (l[cur] >= 0) dmg += a[l[cur]];
+                if (r[cur] < n) dmg += a[r[cur]];
 
-            for (int cur : remain) {
-                if (mods[a[cur] % x] != -1) {
-                    ans.push_back({cur + 1, mods[a[cur] % x] + 1});
-                    remain.erase(cur);
-                    break;
+                if (dmg > d[cur]) {
+                    dead.push_back(cur);
                 }
-                mods[a[cur] % x] = cur;
             }
-        }
 
-        reverse(all(ans));
-        cout << "YES\n";
-        for (auto& p : ans) cout << p.first << ' ' << p.second << '\n';
+            set<int> newc;
+
+            for (int cur : dead) {
+                newc.erase(cur);
+                if (l[cur] >= 0) {
+                    r[l[cur]] = r[cur];
+                    newc.insert(l[cur]);
+                }
+
+                if (r[cur] < n) {
+                    l[r[cur]] = l[cur];
+                    newc.insert(r[cur]);
+                }
+            }
+
+            cands = newc;
+            cout << sz(dead) << ' ';
+        }
+        cout << '\n';
     }
 }

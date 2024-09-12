@@ -22,36 +22,51 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    set<int> has;
+    for (int i = 0; i <= 99999; i += 3) {
+        has.insert(i);
+    }
+    has.insert(100000);
+    int total = sz(has) + 33333;
 
-    while (t--) {
-        int n;
-        cin >> n;
-        vector<int> a(n);
-        set<int> remain;
-        for (int i = 0; i < n; i++) {
-            cin >> a[i];
-            remain.insert(i);
+    cout << total << endl;
+
+    int x;
+    cin >> x;
+    while (x != -1) {
+        if (x == 100000) {
+            cout << total << endl;
         }
-
-        vector<pair<int, int>> ans;
-
-        for (int x = n - 1; x > 0; x--) {
-            vector<int> mods(x, -1);
-
-            for (int cur : remain) {
-                if (mods[a[cur] % x] != -1) {
-                    ans.push_back({cur + 1, mods[a[cur] % x] + 1});
-                    remain.erase(cur);
-                    break;
-                }
-                mods[a[cur] % x] = cur;
+        else if (has.find(x) == has.end()) {
+            if (x % 3 == 1) {
+                has.insert(x + 1);
             }
+            else {
+                has.insert(x - 1);
+            }
+
+            cout << -1 << endl;
+        }
+        else {
+            int idx = (x / 3 * 2) + 1;
+            if (x % 3) {
+                idx++;
+            }
+
+            cout << idx << endl;
         }
 
-        reverse(all(ans));
-        cout << "YES\n";
-        for (auto& p : ans) cout << p.first << ' ' << p.second << '\n';
+        cin >> x;
+    }
+
+    for (int i = 0; i <= 99999; i += 3) {
+        cout << i << endl;
+
+        if (has.find(i + 1) != has.end()) {
+            cout << i + 1 << endl;
+        }
+        else {
+            cout << i + 2 << endl;
+        }
     }
 }

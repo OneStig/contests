@@ -19,6 +19,8 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_B = 60;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -28,30 +30,25 @@ uci main() {
     while (t--) {
         int n;
         cin >> n;
-        vector<int> a(n);
-        set<int> remain;
-        for (int i = 0; i < n; i++) {
-            cin >> a[i];
-            remain.insert(i);
-        }
+        vector<int> ans;
+        ans.push_back(n);
 
-        vector<pair<int, int>> ans;
-
-        for (int x = n - 1; x > 0; x--) {
-            vector<int> mods(x, -1);
-
-            for (int cur : remain) {
-                if (mods[a[cur] % x] != -1) {
-                    ans.push_back({cur + 1, mods[a[cur] % x] + 1});
-                    remain.erase(cur);
-                    break;
-                }
-                mods[a[cur] % x] = cur;
+        for (int b = 0; b < MAX_B; b++) {
+            int m = 1ll << b;
+            if (n & m) {
+                int cur = n - m;
+                if (cur) ans.push_back(cur);
             }
         }
 
         reverse(all(ans));
-        cout << "YES\n";
-        for (auto& p : ans) cout << p.first << ' ' << p.second << '\n';
+        cout << sz(ans) << '\n';
+        for (int& x : ans) {
+            cout << x << ' ';
+        }
+        cout << '\n';
     }
 }
+
+// 1110 : 14
+// 1010

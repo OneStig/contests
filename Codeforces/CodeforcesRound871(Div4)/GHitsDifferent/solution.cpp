@@ -19,8 +19,29 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_N = 1e6;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    vector<int> mem(2 * MAX_N);
+    int layer = 1;
+    int count{};
+    for (int i = 1; i <= MAX_N; i++) {
+        mem[i] += i * i;
+        mem[i + layer] += mem[i];
+        mem[i + layer + 1] += mem[i];
+        // dbg(i, i + layer, i + layer + 1, i + 2 * layer + 2);
+
+        // remove double count going 2 layers down
+        mem[i + 2 * layer + 2] -= mem[i];
+
+        count++;
+        if (count == layer) {
+            layer++;
+            count = 0;
+        }
+    }
 
     int t;
     cin >> t;
@@ -28,30 +49,6 @@ uci main() {
     while (t--) {
         int n;
         cin >> n;
-        vector<int> a(n);
-        set<int> remain;
-        for (int i = 0; i < n; i++) {
-            cin >> a[i];
-            remain.insert(i);
-        }
-
-        vector<pair<int, int>> ans;
-
-        for (int x = n - 1; x > 0; x--) {
-            vector<int> mods(x, -1);
-
-            for (int cur : remain) {
-                if (mods[a[cur] % x] != -1) {
-                    ans.push_back({cur + 1, mods[a[cur] % x] + 1});
-                    remain.erase(cur);
-                    break;
-                }
-                mods[a[cur] % x] = cur;
-            }
-        }
-
-        reverse(all(ans));
-        cout << "YES\n";
-        for (auto& p : ans) cout << p.first << ' ' << p.second << '\n';
+        cout << mem[n] << '\n';
     }
 }

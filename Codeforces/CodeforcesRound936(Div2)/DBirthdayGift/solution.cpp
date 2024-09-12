@@ -31,6 +31,68 @@ uci main() {
         x++;
 
         vector<int> a(n);
-        for (int &x : a) cin >> x;
+        int all{};
+        for (int &y : a) {
+            cin >> y;
+            all ^= y;
+        }
+
+        if (all >= x) {
+            cout << "-1\n";
+            continue;
+        }
+
+        auto domerge = [&x](vector<int>& todo, int bit) {
+            int mask = 1 << bit;
+            vector<int> done;
+            int last{};
+            for (int x : todo) {
+                last ^= x;
+                if ((last & mask) == 0) {
+                    done.push_back(last);
+                    last = 0;
+                }
+            }
+
+            todo = done;
+        };
+
+        int ans = 1;
+        for (int b = 30; b >= 0; b--) {
+            int mask = 1 << b, count{};
+
+            for (int y : a) {
+                count += ((y & mask) != 0);
+            }
+
+            if (x & mask) {
+                if (count == 0) {
+                    ans = max(ans, sz(a));
+                    break;
+                }
+
+                // if count is odd, nothing we can do at this point
+                if (count % 2 == 0) {
+                    // if even, we can try merging here to force a 0
+                    vector<int> cpy = a;
+                    domerge(cpy, b);
+                    ans = max(ans, sz(cpy));
+                }
+            }
+            else {
+                if (count % 2) {
+                    break; // cant procede from this point
+                }
+
+                if (count != 0) {
+                    // we need to perform some merges
+                    domerge(a, b);
+                }
+            }
+        }
+
+        cout << ans << '\n';
     }
 }
+
+// check to see if we can make 0

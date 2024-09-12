@@ -26,32 +26,18 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
-        vector<int> a(n);
-        set<int> remain;
-        for (int i = 0; i < n; i++) {
-            cin >> a[i];
-            remain.insert(i);
-        }
+        int n, m;
+        cin >> n >> m;
 
-        vector<pair<int, int>> ans;
+        for (int i = 1; i <= n; i++) {
+            int row = i / 2 + (i % 2) * (n / 2 + 1);
+            row = (row - 1) * m + 1;
 
-        for (int x = n - 1; x > 0; x--) {
-            vector<int> mods(x, -1);
-
-            for (int cur : remain) {
-                if (mods[a[cur] % x] != -1) {
-                    ans.push_back({cur + 1, mods[a[cur] % x] + 1});
-                    remain.erase(cur);
-                    break;
-                }
-                mods[a[cur] % x] = cur;
+            for (int j = 0; j < m; j++) {
+                cout << row++ << ' ';
             }
+            cout << '\n';
         }
-
-        reverse(all(ans));
-        cout << "YES\n";
-        for (auto& p : ans) cout << p.first << ' ' << p.second << '\n';
+        cout << '\n';
     }
 }
