@@ -19,28 +19,6 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n;
-    cin >> n;
-
-    vector<int> a(n), b(n);
-
-    for (int& x : a) cin >> x;
-
-    multiset<int> diffs;
-    for (int i = 0; i < n; i++) {
-        cin >> b[i];
-        if (b[i] != a[i]) {
-            diffs.insert(b[i]);
-        }
-    }
-
-
-    int m;
-    cin >> m;
-    vector<int> d()
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -48,6 +26,40 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n, m;
+        cin >> n;
+        vector<int> a(n), b(n);
+        set<int> inb;
+        for (int& x : a) cin >> x;
+        for (int i = 0; i < n; i++) {
+            cin >> b[i];
+            inb.insert(b[i]);
+        }
+
+        cin >> m;
+        vector<int> d(m);
+        for (int& x : d) cin >> x;
+
+        int bad{};
+        map<int, int> need;
+        for (int i = 0; i < n; i++) {
+            if (a[i] != b[i]) {
+                need[b[i]]++;
+                bad++;
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            if (need[d[i]] != 0) {
+                need[d[i]]--;
+                bad--;
+            }
+        }
+
+        if (!inb.contains(d[m - 1])) {
+            bad = 1;
+        }
+
+        cout << (bad ? "NO" : "YES") << '\n';
     }
 }

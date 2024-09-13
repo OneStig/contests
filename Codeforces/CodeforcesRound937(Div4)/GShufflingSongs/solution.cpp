@@ -28,28 +28,39 @@ uci main() {
     while (t--) {
         int n;
         cin >> n;
-        array<string, 2> grid;
-        cin >> grid[0] >> grid[1];
 
-        vector<vector<bool>> reach(2, vector<bool>(n));
-        reach[0][0] = 1;
-
+        vector<int> genres(n), writers(n);
+        map<string, int> as, bs;
         for (int i = 0; i < n; i++) {
-            for (int r = 0; r < 2; r++) if (reach[r][i]) {
-                if (i != n - 1) {
-                    if (grid[r][i + 1] == '>') {
-                        reach[r][i + 2] = 1;
-                    }
+            string a, b;
+            cin >> a >> b;
 
-                    if (grid[1 - r][i] == '>') {
-                        reach[1 - r][i + 1] = 1;
+            if (!as.contains(a)) as[a] = sz(as);
+            if (!bs.contains(b)) bs[b] = sz(bs);
+
+            genres[i] = as[a];
+            writers[i] = bs[b];
+        }
+
+        vector<vector<bool>> dp(1 << n, vector<bool>(n));
+        for (int i = 0; i < n; i++) {
+            dp[1 << i][i] = 1;
+        }
+
+        int ans = n - 1;
+        for (int m = 1; m < 1 << n; m++) {
+            for (int i = 0; i < n; i++) {
+                if (dp[m][i]) {
+                    for (int j = 0; j < n; j++) {
+                        if ((m & (1 << j)) == 0 && (genres[i] == genres[j] || writers[i] == writers[j])) {
+                            dp[m + (1 << j)][j] = 1;
+                            ans = min(ans, n - (__builtin_popcount(m) + 1));
+                        }
                     }
                 }
             }
         }
 
-        bool yes = reach[1][n - 1] || reach[0][n - 1] || reach[1][n - 2];
-
-        cout << (yes ? "YES" : "NO") << '\n';
+        cout << ans << '\n';
     }
 }

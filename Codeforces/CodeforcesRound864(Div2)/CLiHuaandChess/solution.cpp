@@ -19,6 +19,17 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+int ask(int r, int c) {
+    cout << "? " << r << ' ' << c << endl;
+    int resp;
+    cin >> resp;
+    return resp;
+}
+
+void ans(int r, int c) {
+    cout << "! " << r << ' ' << c << endl;
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,30 +37,40 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
-        array<string, 2> grid;
-        cin >> grid[0] >> grid[1];
+        int n, m;
+        cin >> n >> m;
 
-        vector<vector<bool>> reach(2, vector<bool>(n));
-        reach[0][0] = 1;
+        int first = ask(1, 1);
+        if (first == 0) {
+            ans(1, 1);
+            continue;
+        }
 
-        for (int i = 0; i < n; i++) {
-            for (int r = 0; r < 2; r++) if (reach[r][i]) {
-                if (i != n - 1) {
-                    if (grid[r][i + 1] == '>') {
-                        reach[r][i + 2] = 1;
-                    }
+        first++;
 
-                    if (grid[1 - r][i] == '>') {
-                        reach[1 - r][i + 1] = 1;
-                    }
+        // 3 cases, fit in both dimensions or either
+        if (first <= n && first <= m) {
+            int second = ask(first, first);
+            if (second == 0) {
+                ans(first, first);
+            }
+            else {
+                int third = ask(first, first - second);
+                if (third == 0) {
+                    ans(first, first - second);
+                }
+                else {
+                    ans(first - second, first);
                 }
             }
         }
-
-        bool yes = reach[1][n - 1] || reach[0][n - 1] || reach[1][n - 2];
-
-        cout << (yes ? "YES" : "NO") << '\n';
+        else if (first > n) {
+            int second = ask(1, first);
+            ans(1 + second, first);
+        }
+        else {
+            int second = ask(first, 1);
+            ans(first, 1 + second);
+        }
     }
 }

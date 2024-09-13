@@ -22,34 +22,23 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    string s;
+    int n;
+    cin >> n >> s;
+    int mx = pow(2, n);
+    int ones{};
 
-    while (t--) {
-        int n;
-        cin >> n;
-        array<string, 2> grid;
-        cin >> grid[0] >> grid[1];
-
-        vector<vector<bool>> reach(2, vector<bool>(n));
-        reach[0][0] = 1;
-
-        for (int i = 0; i < n; i++) {
-            for (int r = 0; r < 2; r++) if (reach[r][i]) {
-                if (i != n - 1) {
-                    if (grid[r][i + 1] == '>') {
-                        reach[r][i + 2] = 1;
-                    }
-
-                    if (grid[1 - r][i] == '>') {
-                        reach[1 - r][i + 1] = 1;
-                    }
-                }
-            }
-        }
-
-        bool yes = reach[1][n - 1] || reach[0][n - 1] || reach[1][n - 2];
-
-        cout << (yes ? "YES" : "NO") << '\n';
+    for (char c : s) {
+        ones += c == '1';
     }
+
+    // if there is just one 1, only 1 fails.
+    // if two 1s, 2->1, 4->3 : 4->2
+    // if three 1s, 2->1, 4->3, 6->5, 8->7 : 4->2, 8->6 : 8->4
+
+    int bot = pow(2, ones), top = pow(2, n - ones);
+    for (int i = bot; i <= mx - top + 1; i++) {
+        cout << i << ' ';
+    }
+    cout << '\n';
 }
