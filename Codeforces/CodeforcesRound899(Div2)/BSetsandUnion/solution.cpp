@@ -29,26 +29,32 @@ uci main() {
         int n;
         cin >> n;
 
-        vector<set<int>> pts(2);
-
+        set<int> omit;
+        vector<set<int>> s(n);
         for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
+            int k;
+            cin >> k;
+
+            while (k--) {
+                int x;
+                cin >> x;
+                s[i].insert(x);
+                omit.insert(x);
+            }
         }
 
-
         int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
+        for (int o : omit) {
+            set<int> cur;
+            for (int i = 0; i < n; i++) {
+                if (!s[i].contains(o)) {
+                    for (int j : s[i]) {
+                        cur.insert(j);
+                    }
                 }
             }
+
+            ans = max(ans, sz(cur));
         }
 
         cout << ans << '\n';

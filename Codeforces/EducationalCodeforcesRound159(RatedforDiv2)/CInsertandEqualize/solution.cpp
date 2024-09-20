@@ -29,26 +29,20 @@ uci main() {
         int n;
         cin >> n;
 
-        vector<set<int>> pts(2);
-
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
+        vector<int> a(n);
+        int mx{}, fact{};
+        for (int& x : a) {
+            cin >> x;
+            mx = max(mx, x);
         }
 
+        for (int& x : a) {
+            fact = gcd(fact, mx - x);
+        }
 
         int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
-            }
+        for (int& x : a) {
+            ans += (mx - x) / fact + 1;
         }
 
         cout << ans << '\n';

@@ -26,31 +26,32 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, m, k;
+        cin >> n >> m >> k;
 
-        vector<set<int>> pts(2);
+        vector<int> a(k);
+        for (int& x : a) cin >> x;
 
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
-        }
-
-
-        int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
+        priority_queue<int> out;
+        int nxt = k;
+        int worst = 0;
+        for (int& x : a) {
+            while (sz(out) && nxt == out.top()) {
+                out.pop();
+                nxt--;
             }
+
+            out.push(x);
+            worst = max(worst, sz(out));
         }
 
-        cout << ans << '\n';
+        worst = max(worst, sz(out));
+
+        if (worst >= n * m - 2) {
+            cout << "TIDAK\n";
+        }
+        else {
+            cout << "YA\n";
+        }
     }
 }

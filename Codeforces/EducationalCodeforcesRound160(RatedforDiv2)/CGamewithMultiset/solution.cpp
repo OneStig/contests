@@ -22,35 +22,26 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int m;
+    cin >> m;
 
-    while (t--) {
-        int n;
-        cin >> n;
+    vector<int> pow(30);
 
-        vector<set<int>> pts(2);
+    while (m--) {
+        int t, v;
+        cin >> t >> v;
 
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
+        if (t == 1) {
+            pow[v]++;
         }
-
-
-        int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
+        else {
+            for (int i = 29; i >= 0; i--) {
+                int cur = 1 << i;
+                int cansub = min(v / cur, pow[i]);
+                v -= cansub * cur;
             }
-        }
 
-        cout << ans << '\n';
+            cout << (v == 0 ? "YES" : "NO") << '\n';
+        }
     }
 }

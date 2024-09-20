@@ -26,31 +26,51 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int q;
+        cin >> q;
 
-        vector<set<int>> pts(2);
+        int slen = 1, tlen = 1;
+        bool sa = 1, ta = 1;
 
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
-        }
+        while (q--) {
+            int d, k;
+            string x;
+            cin >> d >> k >> x;
 
-
-        int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
+            if (d == 1) {
+                slen += k * sz(x);
+                if (sa) {
+                    for (char& c : x) {
+                        if (c != 'a') {
+                            sa = 0;
+                            break;
+                        }
+                    }
                 }
+            }
+            else if (d == 2) {
+                tlen += k * sz(x);
+                if (ta) {
+                    for (char& c : x) {
+                        if (c != 'a') {
+                            ta = 0;
+                            break;
+                        }
+                    }
+                }
+            }
 
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
+            if (!ta) {
+                cout << "YES\n";
+            }
+            else {
+                if (sa && slen < tlen) {
+                    cout << "YES\n";
+                }
+                else {
+                    cout << "NO\n";
                 }
             }
         }
-
-        cout << ans << '\n';
     }
 }

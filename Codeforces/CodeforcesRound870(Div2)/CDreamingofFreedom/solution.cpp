@@ -19,38 +19,55 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_N = 1e6;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    vector<bool> isprime(MAX_N + 1, 1);
+    isprime[0] = 0;
+    isprime[1] = 0;
+
+    vector<int> primes;
+
+    for (int i = 2; i <= MAX_N; i++) {
+        if (isprime[i]) {
+            primes.push_back(i);
+        }
+
+        if (isprime[i] && i * i <= MAX_N) {
+            for (int j = i * i; j <= MAX_N; j += i) {
+                isprime[j] = 0;
+            }
+        }
+    }
 
     int t;
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, m;
+        cin >> n >> m;
 
-        vector<set<int>> pts(2);
-
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
+        if (n == 1) {
+            cout << "YES\n";
+            continue;
         }
 
+        if (m >= n) {
+            cout << "NO\n";
+            continue;
+        }
 
-        int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
+        bool yes = 1;
+        for (int i = 0; i < sz(primes) && primes[i] <= sqrt(n); i++) {
+            if (primes[i] > m) break;
+            if (n % primes[i] == 0) {
+                yes = 0;
+                break;
             }
         }
 
-        cout << ans << '\n';
+        cout << (yes ? "YES" : "NO") << '\n';
     }
 }

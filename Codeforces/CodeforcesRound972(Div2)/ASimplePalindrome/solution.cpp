@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cmath>
 
 using namespace std;
 
@@ -25,32 +26,21 @@ uci main() {
     int t;
     cin >> t;
 
+    string s = "aeiou";
+
     while (t--) {
         int n;
         cin >> n;
 
-        vector<set<int>> pts(2);
+        for (int i = 0; i < 5; i++) {
+            int many = n / 5;
+            if (i < n % 5) many++;
 
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
-        }
-
-
-        int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
+            for (int j = 0; j < many; j++) {
+                cout << s[i];
             }
         }
 
-        cout << ans << '\n';
+        cout << '\n';
     }
 }

@@ -25,30 +25,46 @@ uci main() {
     int t;
     cin >> t;
 
+    string narek = "narek";
+    set<char> in = {
+        'n', 'a', 'r', 'e', 'k'
+    };
+
     while (t--) {
-        int n;
-        cin >> n;
+        int n, m;
+        cin >> n >> m;
+        vector<string> a(n);
+        for (auto& x : a) cin >> x;
 
-        vector<set<int>> pts(2);
-
+        vector<int> dp(5, INT_MIN);
+        dp[4] = 0;
         for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
+            vector<int> ndp = dp;
+            for (int l = 0; l < 5; l++) {
+                int score = dp[l];
+                char last = l;
+
+                for (int j = 0; j < m; j++) {
+                    if (a[i][j] == narek[(last + 1) % 5]) {
+                        if (last == 3) {
+                            score += 5;
+                        }
+
+                        last = (last + 1) % 5;
+                    }
+                    else if (in.contains(a[i][j])) {
+                        score--;
+                    }
+                }
+                ndp[last] = max(ndp[last], score);
+            }
+
+            dp = ndp;
         }
 
-
         int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
-            }
+        for (int i = 0; i < 5; i++) {
+            ans = max(ans, dp[i] - ((i + 1) % 5));
         }
 
         cout << ans << '\n';

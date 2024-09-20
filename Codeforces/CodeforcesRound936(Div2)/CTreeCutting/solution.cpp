@@ -19,6 +19,22 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+// return # of groups, and # unpaired
+pair<int, int> dfs(int x, int par, vector<vector<int>>& adj, int need) {
+    int groups{}, unpaired = 1;
+    for (int nb : adj[x]) {
+        if (nb == par) continue;
+        pair<int, int> resp = dfs(nb, x, adj, need);
+        groups += resp.first;
+        unpaired += resp.second;
+    }
+
+    if (unpaired >= need) {
+        return {groups + 1, 0};
+    }
+    return {groups, unpaired};
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,28 +42,28 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, k;
+        cin >> n >> k;
+        vector<vector<int>> adj(n + 1);
 
-        vector<set<int>> pts(2);
-
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
+        for (int i = 1; i < n; i++) {
+            int u, v;
+            cin >> u >> v;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
         }
 
+        int ans = 1, l = 1, r = n;
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            pair<int, int> check = dfs(1, 0, adj, mid);
 
-        int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
+            if (check.first > k) {
+                ans = max(ans, mid);
+                l = mid + 1;
+            }
+            else {
+                r = mid - 1;
             }
         }
 

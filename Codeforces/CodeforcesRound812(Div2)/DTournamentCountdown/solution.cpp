@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <ratio>
 
 using namespace std;
 
@@ -19,6 +20,13 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+int ask(int a, int b) {
+    cout << "? " << a << ' ' << b << endl;
+    int resp;
+    cin >> resp;
+    return resp;
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -28,51 +36,42 @@ uci main() {
     while (t--) {
         int n;
         cin >> n;
-        vector<int> a(n);
-        int sum{};
-        for (int& x : a) {
-            cin >> x;
-            sum += x;
-        }
+        vector<int> cands(1 << n);
+        iota(all(cands), 1);
 
-        if (sum % 2) {
-            cout << -1 << '\n';
-            continue;
-        }
+        while (sz(cands) > 2) {
+            vector<int> newc;
 
-        vector<int> parts;
-        int seen = -1;
-        for (int i = 0; i < n; i++) {
-            if (a[i] != 0) {
-                if (seen != -1) {
-                    // from seen to i
-                    if (a[seen] + a[i] != 0) {
-                        parts.push_back(i);
-                    }
-                    seen = -1;
+            for (int i = 0; i < sz(cands) / 4; i++) {
+                int a = cands[i * 4], b = cands[i * 4 + 1], c = cands[i * 4 + 2], d = cands[i * 4 + 3];
+
+                int cur = ask(a, c);
+                if (cur == 0) {
+                    if (ask(b, d) == 1) newc.push_back(b);
+                    else newc.push_back(d);
+                }
+                else if (cur == 1) {
+                    if (ask(a, d) == 1) newc.push_back(a);
+                    else newc.push_back(d);
                 }
                 else {
-                    seen = i;
+                    if (ask(b, c) == 1) newc.push_back(b);
+                    else newc.push_back(c);
                 }
             }
+
+            cands = newc;
         }
 
-        int nxt = 0;
-        vector<pair<int, int>> ans;
-        for (int i = 1; i <= n; i++) {
-            if (nxt < sz(parts) && parts[nxt] == i) {
-                ans.push_back({parts[nxt], parts[nxt] + 1});
-                nxt++;
-                i++;
-            }
-            else {
-                ans.push_back({i, i});
-            }
+        int final;
+        if (sz(cands) == 1) {
+            final = cands[0];
+        }
+        else {
+            if (ask(cands[0], cands[1]) == 1) final = cands[0];
+            else final = cands[1];
         }
 
-        cout << sz(ans) << '\n';
-        for (auto& x : ans) {
-            cout << x.first << ' ' << x.second << '\n';
-        }
+        cout << "! " << final << endl;
     }
 }

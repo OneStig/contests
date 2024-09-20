@@ -26,31 +26,27 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
+        int n, k;
+        cin >> n >> k;
+        k--;
 
-        vector<set<int>> pts(2);
-
+        int g{};
         for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
+            int x;
+            cin >> x;
+            g = gcd(g, x);
         }
 
-
-        int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
-
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
+        if (n == 1) {
+            cout << k + (g <= k) << '\n';
+        }
+        else {
+            int cur = 0;
+            for (int i = 0; i < n; i++) {
+                if (cur <= k) k++;
+                cur += g;
             }
+            cout << k << '\n';
         }
-
-        cout << ans << '\n';
     }
 }

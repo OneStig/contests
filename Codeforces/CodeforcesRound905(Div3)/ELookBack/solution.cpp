@@ -29,26 +29,19 @@ uci main() {
         int n;
         cin >> n;
 
-        vector<set<int>> pts(2);
-
-        for (int i = 0; i < n; i++) {
-            int x, y;
-            cin >> x >> y;
-            pts[y].insert(x);
-        }
-
+        vector<int> a(n);
+        for (int& x : a) cin >> x;
 
         int ans{};
-        for (int side = 0; side < 2; side++) {
-            for (int x : pts[side]) {
-                if (pts[1 - side].contains(x)) {
-                    ans += sz(pts[1 - side]) - 1;
-                }
+        int last = a[0];
+        int exp = 0;
+        for (int i = 1; i < n; i++) {
+            int nexp = exp + ceil(log2((ld)last / (ld)a[i]));
+            nexp = max(0ll, nexp);
 
-                if (pts[1 - side].contains(x - 1) && pts[1 - side].contains(x + 1)) {
-                    ans++;
-                }
-            }
+            ans += nexp;
+            last = a[i];
+            exp = nexp;
         }
 
         cout << ans << '\n';
