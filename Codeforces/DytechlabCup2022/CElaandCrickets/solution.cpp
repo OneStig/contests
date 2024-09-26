@@ -26,34 +26,29 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
-        vector<int> a(n);
+        int n, r1, c1, r2, c2, r3, c3, x, y;
+        cin >> n >> r1 >> c1 >> r2 >> c2 >> r3 >> c3 >> x >> y;
 
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
+        int cx = (c1 == c2 ? c2 : c3);
+        int rx = (r1 == r2 ? r2 : r3);
+
+        // corner case, must be on the same row or same column
+        if ((cx == 1 || cx == n) && (rx == 1 || rx == n)) {
+            if (cx == y || rx == x) {
+                cout << "YES\n";
             }
             else {
-                a[i] = 1;
+                cout << "NO\n";
             }
+            continue;
         }
 
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
+        // if on different colors always reachable, or in same parity row/col
+        if ((x + y) % 2 != (cx + rx) % 2 || y % 2 == cx % 2) {
+            cout << "YES\n";
+        }
+        else {
+            cout << "NO\n";
+        }
     }
 }

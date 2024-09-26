@@ -26,34 +26,20 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
+        int n;
+        cin >> n;
         vector<int> a(n);
+        int tot{};
+        for (int& x : a) { cin >> x; tot += x; }
 
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else {
-                a[i] = 1;
-            }
+        if (n <= 2) {
+            cout << -1 << '\n';
+            continue;
         }
 
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
+        sort(all(a));
+
+        int targ = a[n / 2] * n * 2;
+        cout << max(0ll, targ - tot + 1) << '\n';
     }
 }

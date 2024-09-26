@@ -26,34 +26,21 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
+        int n, q;
+        cin >> n >> q;
+
         vector<int> a(n);
+        for (int& x : a) cin >> x;
 
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
+        while (q--) {
+            int l, r;
+            cin >> l >> r;
+
+            if ((r - l) % 2 == 0) {
+                cout << "NO\n";
+                continue;
             }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else {
-                a[i] = 1;
-            }
+            cout << "YES\n";
         }
-
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
     }
 }

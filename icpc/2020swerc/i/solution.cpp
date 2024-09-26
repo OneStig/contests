@@ -19,41 +19,50 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int INF = 1e9;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, m;
+    cin >> n >> m;
 
-    while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
-        vector<int> a(n);
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
 
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else {
-                a[i] = 1;
+    vector<int> dist(n + 1, INF);
+    dist[1] = 0;
+
+    queue<int> todo;
+    todo.push(1);
+
+    while (!todo.empty()) {
+        int cur = todo.front();
+        todo.pop();
+
+        for (int& nb : adj[cur]) {
+            if (dist[nb] == INF) {
+                dist[nb] = dist[cur] + 1;
+                todo.push(nb);
             }
         }
+    }
 
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
+    int ans = 0;
+    for (int i = 1; i <= n; i++) {
+        ans = max(ans, dist[i]);
+    }
+
+    if (ans == INF) {
+        cout << "-1\n";
+    }
+    else {
+        ans = ceil(log2(ans)) + 1;
+        cout << ans << '\n';
     }
 }

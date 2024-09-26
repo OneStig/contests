@@ -21,39 +21,4 @@ typedef int uci;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
-    int t;
-    cin >> t;
-
-    while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
-        vector<int> a(n);
-
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else {
-                a[i] = 1;
-            }
-        }
-
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
-    }
 }

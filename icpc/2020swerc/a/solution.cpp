@@ -22,38 +22,29 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, k;
+    cin >> n >> k;
+    n *= 3;
 
-    while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
-        vector<int> a(n);
+    map<string, pair<int, int>> words;
+    string _;
+    getline(cin, _);
+    for (int i = 0; i < n; i++) {
+        string s;
+        getline(cin, s);
+        words[s].first--;
+        words[s].second = -i;
+    }
 
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else {
-                a[i] = 1;
-            }
-        }
+    map<pair<int, int>, string> rev;
+    for (auto& [a, b] : words) {
+        rev[b] = a;
+    }
 
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
+    int count = 1;
+    for (auto& [a, b] : rev) {
+        cout << b << '\n';
+        count++;
+        if (count > k) break;
     }
 }

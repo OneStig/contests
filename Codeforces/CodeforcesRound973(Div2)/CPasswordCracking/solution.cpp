@@ -27,7 +27,7 @@ bool ask(string t) {
 }
 
 void ans(string s) {
-    cout << "! " << endl;
+    cout << "! " << s << endl;
 }
 
 uci main() {
@@ -39,5 +39,42 @@ uci main() {
     while (t--) {
         int n;
         cin >> n;
+
+        bool z = ask("0");
+        if (!z) {
+            string a = "";
+            for (int i = 0; i < n; i++) a += "1";
+            ans(a);
+            continue;
+        }
+
+        string build = "0";
+
+        while (sz(build) < n) {
+            bool first = ask(build + "0");
+            if (first) {
+                build += "0";
+                continue;
+            }
+
+            bool second = ask(build + "1");
+            if (second) {
+                build += "1";
+                continue;
+            }
+
+            break;
+        }
+
+        while (sz(build) < n) {
+            if (ask("0" + build)) {
+                build = "0" + build;
+            }
+            else {
+                build = "1" + build;
+            }
+        }
+
+        ans(build);
     }
 }

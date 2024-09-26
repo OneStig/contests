@@ -26,34 +26,39 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
+        int n;
+        cin >> n;
         vector<int> a(n);
+        for (int& x : a) cin >> x;
 
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
+        vector<int> b(n);
+        for (int i = 1; i < n; i += 2) {
+            if (i == n - 2) {
+                int x, y, z;
+                if (a[i] > 0 == a[i - 1] > 0) {
+                    x = i - 1, y = i, z = i + 1;
+                }
+                else if (a[i] > 0 == a[i + 1] > 0) {
+                    x = i, y = i + 1, z = i - 1;
                 }
                 else {
-                    a[i] = 1;
+                    x = i - 1, y = i + 1, z = i;
                 }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
+
+                b[x] = b[y] = a[z];
+                b[z] = a[x] + a[y];
+                b[z] *= -1;
             }
             else {
-                a[i] = 1;
+                b[i - 1] = a[i];
+                b[i] = a[i - 1];
+                b[i] *= -1;
             }
         }
 
-        for (int& x : a) cout << x << ' ';
+        for (int& x : b) {
+            cout << x << ' ';
+        }
         cout << '\n';
     }
 }

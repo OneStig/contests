@@ -19,6 +19,39 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+void dfs(int x, int par, int c, vector<vector<int>>& adj, vector<array<int, 2>>& dp, vector<int>& a) {
+    dp[x][1] += a[x];
+
+    for (int& nb : adj[x]) {
+        if (nb == par) continue;
+        dfs(nb, x, c, adj, dp, a);
+        dp[x][0] += max(dp[nb][0], dp[nb][1]);
+        dp[x][1] += max(dp[nb][0], dp[nb][1] - 2 * c);
+    }
+}
+
+void solve() {
+    int n, c;
+    cin >> n >> c;
+
+    vector<int> a(n);
+    for (int& x : a) cin >> x;
+
+    vector<vector<int>> adj(n);
+    for (int i = 1; i < n; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<array<int, 2>> dp(n);
+    dfs(0, 0, c, adj, dp, a);
+
+    cout << max(dp[0][0], dp[0][1]) << '\n';
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,34 +59,6 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
-        vector<int> a(n);
-
-        for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else {
-                a[i] = 1;
-            }
-        }
-
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
+        solve();
     }
 }

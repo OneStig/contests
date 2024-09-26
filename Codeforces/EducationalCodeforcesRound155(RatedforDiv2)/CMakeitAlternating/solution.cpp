@@ -19,41 +19,47 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MOD = 998244353;
+const int MAX_N = 2e5;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    vector<int> fact(MAX_N + 1);
+
+    int cur = 1;
+    for (int i = 1; i <= MAX_N; i++) {
+        cur *= i;
+        cur %= MOD;
+        fact[i] = cur;
+    }
 
     int t;
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
-        vector<int> a(n);
+        string s;
+        cin >> s;
+        int n = sz(s);
+        vector<int> block;
 
+        char last = 'x';
         for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
+            if (s[i] != last) {
+                block.push_back(0);
             }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else {
-                a[i] = 1;
-            }
+            block.back()++;
+            last = s[i];
         }
 
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
+        int fans = n - sz(block);
+        int ans = max(fact[fans], 1ll);
+
+        for (int& x : block) {
+            ans *= x;
+            ans %= MOD;
+        }
+
+        cout << fans << ' ' << ans << '\n';
     }
 }

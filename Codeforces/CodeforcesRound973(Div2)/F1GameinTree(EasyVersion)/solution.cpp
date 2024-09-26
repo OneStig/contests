@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cstddef>
 
 using namespace std;
 
@@ -19,6 +20,25 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+void solve() {
+    int n, u, v;
+    cin >> n;
+    vector<vector<int>> adj(n + 1);
+
+    for (int i = 1; i < n; i++) {
+        int a, b;
+        cin >> a >> b;
+        adj[a].p
+    }
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        solve();
+    }
 }

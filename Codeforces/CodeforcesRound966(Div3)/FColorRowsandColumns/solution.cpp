@@ -19,6 +19,8 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int INF = 1e12;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,34 +28,41 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, x, y;
-        cin >> n >> x >> y;
-        x--, y--;
-        vector<int> a(n);
+        int n, k;
+        cin >> n >> k;
+
+        vector<pair<int, int>> rect(n);
+        for (auto& x : rect) cin >> x.first >> x.second;
+
+        vector<int> dp(k + 1, INF);
+        dp[0] = 0;
 
         for (int i = 0; i < n; i++) {
-            if (i < y) {
-                if ((y - i) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
-                }
-            }
-            else if (i > x) {
-                if ((i - x) % 2) {
-                    a[i] = -1;
-                }
-                else {
-                    a[i] = 1;
+            vector<int> ndp = dp;
+
+            int a = rect[i].first, b = rect[i].second;
+            int cost{};
+            for (int make = 1; a || b; make++) {
+                if (b < a) swap(a, b);
+                cost += a;
+                b--;
+
+                for (int alt = 0; alt + make <= k; alt++) {
+                    ndp[alt + make] = min(ndp[alt + make], dp[alt] + cost);
                 }
             }
-            else {
-                a[i] = 1;
-            }
+
+            dp = ndp;
         }
 
-        for (int& x : a) cout << x << ' ';
-        cout << '\n';
+        cout << (dp[k] == INF ? -1 : dp[k]) << '\n';
     }
 }
+
+// square that is n x n
+// n -> n - 1
+//
+// ....
+// xxx.
+// xxx.
+// xxx.

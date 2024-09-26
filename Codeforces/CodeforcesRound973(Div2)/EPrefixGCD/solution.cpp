@@ -29,13 +29,28 @@ uci main() {
         int n;
         cin >> n;
         vector<int> a(n);
-        for (int& x : a) cin >> x;
-
-        int pfx{}, mx = 0;
+        int g{};
         for (int& x : a) {
-            pfx = gcd(pfx, x);
+            cin >> x;
+            g = gcd(g, x);
         }
 
-        vector<int> dp()
+        int ans{};
+        int last{};
+        for (int l = 0; l < min(n, 10ll); l++) {
+            int best = INT_MAX;
+
+            for (int& x : a) {
+                best = min(best, gcd(last, x));
+            }
+            ans += best;
+            last = best;
+        }
+
+        if (n > 10) {
+            ans += (n - 10) * g;
+        }
+
+        cout << ans << '\n';
     }
 }
