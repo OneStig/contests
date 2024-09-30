@@ -19,6 +19,10 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MAX_B = 10;
+const int MAX_P = 1e4;
+const int MOD = 1e9 + 7;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,16 +30,27 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int n;
+        cin >> n;
+        vector<int> a(n), p(n);
+        for (int& x : a) cin >> x;
+        for (int& x : p) cin >> x;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
+        int ev{};
+        for (int b = 0; b < MAX_B; b++) {
+            int m = 1ll << b;
+            int sum{};
+            for (int i = 0; i < n; i++) {
+                if (a[i] & m) {
+                    sum += p[i];
+                }
+            }
 
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+            dbg(sum, m);
+
+            ev += (sum % MAX_P) * m;
         }
+
+        dbg(ev);
     }
 }

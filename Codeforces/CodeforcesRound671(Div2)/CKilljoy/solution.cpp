@@ -26,16 +26,25 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int n, x;
+        cin >> n >> x;
+        vector<int> a(n);
+        for (int& y : a) cin >> y;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
+        int total{}, same{};
+        for (int& y : a) {
+            total += y - x;
+            same += y == x;
+        }
 
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        if (same == n) {
+            cout << "0\n";
+        }
+        else if (total == 0 || same) {
+            cout << "1\n";
+        }
+        else {
+            cout << "2\n";
         }
     }
 }

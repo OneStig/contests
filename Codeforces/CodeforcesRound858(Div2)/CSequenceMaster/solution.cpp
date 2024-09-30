@@ -19,6 +19,8 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int INF = 1e14;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,16 +28,34 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int n;
+        cin >> n;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
+        vector<int> a(2 * n);
+        for (int& x : a) cin >> x;
 
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        if (n == 1) {
+            cout << abs(a[0] - a[1]) << '\n';
+        }
+        else {
+            int ans{};
+            for (int& x : a) ans += abs(x);
+
+            if (n == 2) {
+                int cur{};
+                for (auto& x : a) {
+                    cur += abs(x - 2);
+                }
+                ans = min(ans, cur);
+            }
+
+            if (n % 2 == 0) {
+                int cur{};
+                for (int& x : a) cur += abs(x + 1);
+                for (int& x : a) ans = min(ans, cur - abs(x + 1) + abs(x - n));
+            }
+
+            cout << ans << '\n';
         }
     }
 }

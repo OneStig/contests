@@ -19,6 +19,8 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+int MAX_B = 60;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,16 +28,47 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int b, c, d;
+        cin >> b >> c >> d;
+        int a{};
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
-
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        bool good = 1;
+        for (int bit = MAX_B - 1; bit >= 0; bit--) {
+            int m = 1ll << bit;
+            if (!(b & m) && !(c & m)) {
+                // we can make 1 or 0
+                a += ((d & m) ? m : 0);
+            }
+            else if ((b & m) && (c & m)) {
+                // we can make 0 or 1
+                a += ((d & m) ? 0 : m);
+            }
+            else if (!(b & m) && (c & m)) {
+                // we always make 0
+                if ((d & m)) {
+                    good = 0;
+                    break;
+                }
+            }
+            else if ((b & m) && !(c & m)) {
+                // we always make 1
+                if (!(d & m)) {
+                    good = 0;
+                    break;
+                }
+            }
         }
+
+        cout << (good ? a : -1) << '\n';
     }
 }
+
+// a, b, c
+// 0, 0, 0 =
+// 0, 0, 1
+// 0, 1, 0
+// 0, 1, 1
+// 1, 0, 0
+// 1, 0, 1
+// 1, 1, 0
+// 1, 1, 1

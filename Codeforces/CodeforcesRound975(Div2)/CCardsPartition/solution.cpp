@@ -26,16 +26,35 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int n, k;
+        cin >> n >> k;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
-
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        int most{}, total{};
+        vector<int> a(n);
+        for (int& x : a) {
+            cin >> x;
+            most = max(most, x);
+            total += x;
         }
+
+        int ans = 1;
+        for (int targ = n; targ >= 1; targ--) {
+            bool good;
+
+            if (total <= targ * most) {
+                int need = targ * most - total;
+                good = need <= k;
+            }
+            else {
+                good = (total % targ == 0) || (k >= (targ - (total % targ)));
+            }
+
+            if (good) {
+                ans = targ;
+                break;
+            }
+        }
+
+        cout << ans << '\n';
     }
 }

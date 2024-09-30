@@ -26,16 +26,34 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int n;
+        cin >> n;
+        vector<int> a(n), b(n);
+        for (int& x : a) cin >> x;
+        for (int& x : b) cin >> x;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
-
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        if (n <= 2) {
+            cout << "Bob\n";
+            continue;
         }
+
+        bool same = 1;
+        for (int i = 0; i < n; i++) {
+            if (a[i] != b[i]) {
+                same = 0;
+                break;
+            }
+        }
+
+        reverse(all(a));
+        bool same2 = 1;
+        for (int i = 0; i < n; i++) {
+            if (a[i] != b[i]) {
+                same2 = 0;
+                break;
+            }
+        }
+
+        cout << (same || same2 ? "Bob" : "Alice") << '\n';
     }
 }

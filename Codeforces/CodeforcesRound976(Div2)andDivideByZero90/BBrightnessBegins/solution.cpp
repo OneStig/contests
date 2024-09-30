@@ -26,16 +26,17 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int k;
+        cin >> k;
+        int low = 1, high = k;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
-
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        while (1) {
+            int count = (floor(sqrt((ld)high)) - ceil(sqrt((ld)low)) + 1);
+            if (count == 0) break;
+            low = high + 1;
+            high += count;
         }
+
+        cout << high << '\n';
     }
 }

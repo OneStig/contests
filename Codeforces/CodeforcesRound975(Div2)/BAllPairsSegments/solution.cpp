@@ -26,16 +26,28 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int n, q;
+        cin >> n >> q;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
+        vector<int> a(n);
+        for (int& x : a) cin >> x;
 
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        map<int, int> ans;
+        for (int i = 0; i < n; i++) {
+            ans[i * (n - i - 1) + n - 1]++;
         }
+        for (int i = 1; i < n; i++) {
+            int gap = a[i] - a[i - 1] - 1;
+            ans[i * (n - i)] += gap;
+        }
+
+        while (q--) {
+            int k;
+            cin >> k;
+
+            cout << ans[k] << ' ';
+        }
+
+        cout << '\n';
     }
 }

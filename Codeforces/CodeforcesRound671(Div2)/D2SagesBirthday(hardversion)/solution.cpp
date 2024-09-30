@@ -22,20 +22,47 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
 
-    while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+    vector<int> a(n);
+    for (int& x : a) cin >> x;
+    sort(all(a));
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
+    int l = 0, r = (n + 1) / 2 - 1;
+    while (l < r) {
+        int mid = (l + r + 1) / 2;
 
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        bool good = 1;
+        for (int i = 0; i < mid; i++) {
+            if (a[i] >= a[sz(a) - mid - 1 + i]) {
+                good = 0;
+                break;
+            }
+        }
+
+        if (good) {
+            l = mid;
+        }
+        else {
+            r = mid - 1;
         }
     }
+
+    vector<int> ans;
+    ans.reserve(n);
+    ans.push_back(a[n - l - 1]);
+
+    for (int i = 0; i < l; i++) {
+        ans.push_back(a[i]);
+        ans.push_back(a[n - l + i]);
+    }
+
+    for (int i = l; i < n - l - 1; i++) {
+        ans.push_back(a[i]);
+    }
+
+    cout << l << '\n';
+    for (int& x : ans) cout << x << ' ';
+    cout << '\n';
 }

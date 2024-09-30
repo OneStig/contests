@@ -19,6 +19,10 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+int dist(int x1, int y1, int x2, int y2) {
+    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -26,16 +30,23 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n, m, t0, t1, t2;
-        cin >> n >> m >> t0 >> t1 >> t2;
+        int n;
+        cin >> n;
+        vector<pair<int, int>> circ(n);
+        for (auto& x : circ) cin >> x.first >> x.second;
 
-        vector<vector<array<int, 3>>> adj(n + 1);
-        for (int i = 0; i < m; i++) {
-            int u, v, l1, l2;
-            cin >> u >> v >> l1 >> l2;
+        int xs, ys, xt, yt;
+        cin >> xs >> ys >> xt >> yt;
+        int cap = dist(xs, ys, xt, yt);
 
-            adj[u].push_back({v, l1, l2});
-            adj[v].push_back({u, l1, l2});
+        bool yes = 1;
+        for (auto& x : circ) {
+            if (dist(x.first, x.second, xt, yt) <= cap) {
+                yes = 0;
+                break;
+            }
         }
+
+        cout << (yes ? "YES" : "NO") << '\n';
     }
 }
