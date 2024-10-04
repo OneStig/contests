@@ -28,18 +28,30 @@ uci main() {
     while (t--) {
         int n;
         cin >> n;
-        if (n == 1) cout << "1\n1\n";
-        else if (n == 2) cout << "2\n1 2\n";
-        else if (n == 3) cout << "2\n1 2 2\n";
-        else if (n == 4) cout << "3\n1 2 2 3\n";
-        else if (n == 5) cout << "3\n1 2 2 3 3\n";
-        else if (n == 6) cout << "4\n1 2 2 3 3 4\n";
-        else {
-            cout << "4\n";
-            for (int i = 1; i <= n; i++) {
-                cout << i % 4 + 1 << ' ';
+
+        vector<int> p(n + 1);
+        for (int i = 1; i <= n; i++) cin >> p[i];
+        string s;
+        cin >> s;
+
+        map<int, int> f;
+        for (int i = 1; i <= n; i++) {
+            if (!f.contains(i)) {
+                int count = s[i - 1] == '0';
+                int cur = p[i];
+                while (cur != i) {
+                    count += s[cur - 1] == '0';
+                    cur = p[cur];
+                }
+                while (!f.contains(cur)) {
+                    f[cur] = count;
+                    cur = p[cur];
+                }
             }
-            cout << '\n';
+
+            cout << f[i] << ' ';
         }
+
+        cout << '\n';
     }
 }

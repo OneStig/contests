@@ -29,13 +29,27 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        int n;
-        cin >> n;
-        int len = log10(n) + 1;
-        dbg(n, len);
+        string nstr;
+        cin >> nstr;
+        int n = stoi(nstr);
+        string tmp = nstr + nstr + nstr + nstr + nstr + nstr;
 
+        vector<pair<int, int>> ans;
         for (int a = 1; a <= MAX_A; a++) {
-            // binary search for b?
+            int ns = sz(nstr) * a;
+            for (int len = 1; len <= 6; len++) {
+                if (len >= ns) break;
+                int b = ns - len;
+                int actual = n * a - b;
+                int fake = stoi(tmp.substr(0, len));
+
+                if (actual == fake) {
+                    ans.push_back({a, b});
+                }
+            }
         }
+
+        cout << sz(ans) << '\n';
+        for (auto& x : ans) cout << x.first << ' ' << x.second << '\n';
     }
 }

@@ -28,7 +28,6 @@ uci main() {
     while (t--) {
         int n, q;
         cin >> n >> q;
-
         vector<int> a(n);
         for (int& x : a) cin >> x;
 
@@ -40,7 +39,6 @@ uci main() {
                 cout << "NO\n";
                 continue;
             }
-            cout << "YES\n";
         }
     }
 }

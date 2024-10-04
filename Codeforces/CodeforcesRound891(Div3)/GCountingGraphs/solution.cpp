@@ -19,6 +19,33 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int MOD = 998244353;
+
+int binpow(int a, int n) { // a^n
+    if (n == 0) return 1;
+    if (n % 2 == 0) {
+        return binpow(a * a % MOD, n / 2);
+    }
+    else {
+        return a * binpow(a, n - 1) % MOD;
+    }
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n, s;
+        cin >> n >> s;
+        vector<vector<int>> adj(n + 1);
+        for (int i = 1; i < n; i++) {
+            int u, v;
+            cin >> u >> v;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+    }
 }
