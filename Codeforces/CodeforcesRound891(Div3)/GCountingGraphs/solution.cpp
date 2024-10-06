@@ -21,6 +21,21 @@ typedef int uci;
 
 const int MOD = 998244353;
 
+struct UF {
+	vector<int> e;
+	UF(int n) : e(n, -1) {}
+	bool sameSet(int a, int b) { return find(a) == find(b); }
+	int size(int x) { return -e[find(x)]; }
+	int find(int x) { return e[x] < 0 ? x : e[x] = find(e[x]); }
+	bool join(int a, int b) {
+		a = find(a), b = find(b);
+		if (a == b) return false;
+		if (e[a] > e[b]) swap(a, b);
+		e[a] += e[b]; e[b] = a;
+		return true;
+	}
+};
+
 int binpow(int a, int n) { // a^n
     if (n == 0) return 1;
     if (n % 2 == 0) {
@@ -40,12 +55,22 @@ uci main() {
     while (t--) {
         int n, s;
         cin >> n >> s;
-        vector<vector<int>> adj(n + 1);
-        for (int i = 1; i < n; i++) {
-            int u, v;
-            cin >> u >> v;
-            adj[u].push_back(v);
-            adj[v].push_back(u);
+        vector<array<int, 3>> edges(n - 1);
+        for (auto& x : edges) {
+            cin >> x[1] >> x[2] >> x[0];
         }
+
+        sort(all(edges));
+
+        UF g(n + 1);
+
+        int ans = 1;
+        for (auto& e : edges) {
+            int left = g.size(e[1]), right = g.size(e[2]);
+            ans = ans * binpow(s - e[0] + 1, left * right - 1) % MOD;
+            g.join(e[1], e[2]);
+        }
+
+        cout << ans << '\n';
     }
 }

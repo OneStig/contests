@@ -19,6 +19,8 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+const int BAD = 1e10;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
@@ -44,20 +46,22 @@ uci main() {
                 continue;
             }
 
-            vector<int> match(26, -1);
-            set<int> used;
+            vector<int> match(26, BAD);
+            unordered_set<int> used;
+
             bool yes = 1;
             for (int i = 0; i < n; i++) {
-                if (match[s[i] - 'a'] == -1) {
+                int cur = s[i] - 'a';
+                if (match[cur] == BAD) {
                     if (used.contains(a[i])) {
                         yes = 0;
                         break;
                     }
 
-                    match[s[i] - 'a'] = a[i];
+                    match[cur] = a[i];
                     used.insert(a[i]);
                 }
-                else if (match[s[i] - 'a'] != a[i]) {
+                else if (match[cur] != a[i]) {
                     yes = 0;
                     break;
                 }

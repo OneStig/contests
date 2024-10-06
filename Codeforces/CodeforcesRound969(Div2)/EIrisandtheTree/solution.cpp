@@ -19,17 +19,13 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-void solve() {
-    int n, w;
-    cin >> n >> w;
-
-    vector<int> par(n);
-    vector<vector<int>> adj(n);
-
-    for (int i = 1; i < n; i++) {
-        int p;
-        cin >> p;
+void dfs(int x, vector<vector<int>>& adj, vector<int>& subtree) {
+    int cur = x;
+    for (int& nb : adj[x]) {
+        dfs(nb, adj, subtree);
+        cur = max(cur, subtree[nb]);
     }
+    subtree[x] = cur;
 }
 
 uci main() {
@@ -39,6 +35,47 @@ uci main() {
     cin >> t;
 
     while (t--) {
-        solve();
+        int n, w;
+        cin >> n >> w;
+
+        vector<int> p(n);
+        vector<vector<int>> g(n);
+
+        vector<int> st(n), left(n);
+        int notfull = n;
+        for (int i = 1; i < n; i++) {
+            cin >> p[i];
+            p[i]--;
+            g[p[i]].push_back(i);
+        }
+
+        int total{};
+        dfs(0, g, st);
+
+        for (int i = 1; i < n; i++) {
+            int prev = i - 1;
+            left[prev]++;
+            left[st[i]]++;
+        }
+
+        for (int ev = 1; ev < n; ev++) {
+            int x, y;
+            cin >> x >> y;
+            x--;
+            w -= y;
+
+            int prev = (x - 1) % n;
+            int next = st[x];
+
+            total += 2 * y;
+
+            if (--left[prev] == 0) notfull--;
+            if (--left[next] == 0) notfull--;
+
+            int ans = total + w * notfull;
+            cout << ans << ' ';
+        }
+
+        cout << '\n';
     }
 }
