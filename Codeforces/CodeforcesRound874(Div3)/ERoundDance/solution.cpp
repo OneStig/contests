@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+void dbg_out() { cerr << endl; }
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+
+#ifndef ONLINE_JUDGE
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+#else
+#define dbg(...)
+#endif
+
+typedef int uci;
+#define int long long
+#define ld long double
+#define sz(x) ((int)x.size())
+#define all(a) (a).begin(), (a).end()
+
+uci main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<set<int>> nb(n + 1);
+        vector<bool> vis(n + 1);
+
+        for (int i = 1; i <= n; i++) {
+            int a;
+            cin >> a;
+            nb[i].insert(a);
+            nb[a].insert(i);
+        }
+
+        int loops{}, lines{};
+        for (int i = 1; i <= n; i++) {
+            if (!vis[i]) {
+                vis[i] = 1;
+                int prev = i;
+                int cur = *nb[i].begin();
+                while (cur != i) {
+                    dbg(i, prev, cur);
+                    vis[cur] = 1;
+                    int next = -1;
+                    for (int x : nb[cur]) {
+                        if (x != prev) {
+                            next = x;
+                        }
+                    }
+
+                    if (next == -1) {
+                        loops--;
+                        lines++;
+                        break;
+                    }
+
+                    if (vis[next] && next != i) {
+                        loops--;
+                        break;
+                    }
+
+                    prev = cur;
+                    cur = next;
+                }
+
+                loops++;
+            }
+        }
+
+        dbg(loops, lines);
+        cout << loops + (bool)lines << ' ' << loops + lines << '\n';
+    }
+}
