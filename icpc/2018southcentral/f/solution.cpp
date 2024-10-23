@@ -19,31 +19,29 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int INF = 1e12;
-
 void solve() {
-    int n, m;
-    cin >> n >> m;
+    int n;
+    cin >> n;
 
-    vector<vector<int>> a(n, vector<int>(m));
-    vector<int> dpl(m), dpr(m);
-    for (auto& x : a) for (auto& y : x) cin >> y;
-
+    map<string, int> b;
     for (int i = 0; i < n; i++) {
-        vector<int> ndpl(m), ndpr(m), pfx(m + 1);
-        for (int j = 0; j < m; j++) {
-            pfx[j + 1] = pfx[j] + a[i][j];
-        }
-
-        dpl = ndpl, dpr = ndpr;
+        string s;
+        int count;
+        cin >> s >> count;
+        b[s] += count;
     }
 
-    int ans = -INF;
-    for (int i = 0; i < m; i++) {
-        ans = max({ans, dpl[i], dpr[i]});
+    vector<pair<int, string>> c;
+    for (auto [x, y] : b) {
+        c.emplace_back(-y, x);
     }
 
-    cout << ans << '\n';
+    sort(all(c));
+
+    cout << sz(c) << '\n';
+    for (auto& x : c) {
+        cout << x.second << ' ' << -x.first << '\n';
+    }
 }
 
 uci main() {
@@ -52,7 +50,7 @@ uci main() {
     int t;
     cin >> t;
 
-    while (t--) {
+    while (t--)  {
         solve();
     }
 }

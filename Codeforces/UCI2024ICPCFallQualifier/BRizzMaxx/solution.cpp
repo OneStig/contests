@@ -19,40 +19,31 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int INF = 1e12;
-
-void solve() {
-    int n, m;
-    cin >> n >> m;
-
-    vector<vector<int>> a(n, vector<int>(m));
-    vector<int> dpl(m), dpr(m);
-    for (auto& x : a) for (auto& y : x) cin >> y;
-
-    for (int i = 0; i < n; i++) {
-        vector<int> ndpl(m), ndpr(m), pfx(m + 1);
-        for (int j = 0; j < m; j++) {
-            pfx[j + 1] = pfx[j] + a[i][j];
-        }
-
-        dpl = ndpl, dpr = ndpr;
-    }
-
-    int ans = -INF;
-    for (int i = 0; i < m; i++) {
-        ans = max({ans, dpl[i], dpr[i]});
-    }
-
-    cout << ans << '\n';
-}
-
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    string s;
+    int n, k;
+    cin >> s >> k;
+    n = sz(s);
 
-    while (t--) {
-        solve();
+    int fc = n - 1;
+
+    int c{};
+    for (int i = 0; i < n - 3; i++) {
+        if (s.substr(i, 4) == "rizz") {
+            c++;
+        }
     }
+
+    fc -= c * 3;
+
+    if (k <= fc) {
+        cout << c << '\n';
+        return 0;
+    }
+    k -= fc;
+    c -= (k + 2) / 3;
+
+    cout << c << '\n';
 }

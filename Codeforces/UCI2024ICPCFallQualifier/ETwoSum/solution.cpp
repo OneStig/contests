@@ -19,40 +19,50 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int INF = 1e12;
+#define ull unsigned long long
 
-void solve() {
-    int n, m;
-    cin >> n >> m;
-
-    vector<vector<int>> a(n, vector<int>(m));
-    vector<int> dpl(m), dpr(m);
-    for (auto& x : a) for (auto& y : x) cin >> y;
-
-    for (int i = 0; i < n; i++) {
-        vector<int> ndpl(m), ndpr(m), pfx(m + 1);
-        for (int j = 0; j < m; j++) {
-            pfx[j + 1] = pfx[j] + a[i][j];
-        }
-
-        dpl = ndpl, dpr = ndpr;
-    }
-
-    int ans = -INF;
-    for (int i = 0; i < m; i++) {
-        ans = max({ans, dpl[i], dpr[i]});
-    }
-
-    cout << ans << '\n';
-}
+const int MAX_B = 64;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int n, a;
+    cin >> n >> a;
 
-    while (t--) {
-        solve();
+    int tmp = a;
+    int tot{};
+    vector<int> b(MAX_B);
+    for (int i = 0; tmp != 0; i++) {
+        b[i] = tmp % 2;
+        tot += b[i];
+        tmp /= 2;
     }
+
+    if (n < tot || n > a) {
+        cout << "-1\n";
+        return 0;
+    }
+
+    // otherwise possible, just cascade bits down
+
+    n -= tot;
+    for (int i = MAX_B - 1; i >= 0; i--) {
+        ull cur = (ull)1 << i;
+
+        if (n >= b[i]) {
+            n -= b[i];
+            b[i - 1] += 2 * b[i];
+            continue;
+        }
+        else {
+            b[i] -= n;
+            b[i - 1] += 2 * n;
+            n = 0;
+        }
+
+        for (int j = 0; j < b[i]; j++) {
+            cout << cur << ' ';
+        }
+    }
+    cout << '\n';
 }

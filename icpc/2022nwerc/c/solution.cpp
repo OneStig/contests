@@ -19,40 +19,35 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int INF = 1e12;
-
-void solve() {
-    int n, m;
-    cin >> n >> m;
-
-    vector<vector<int>> a(n, vector<int>(m));
-    vector<int> dpl(m), dpr(m);
-    for (auto& x : a) for (auto& y : x) cin >> y;
-
-    for (int i = 0; i < n; i++) {
-        vector<int> ndpl(m), ndpr(m), pfx(m + 1);
-        for (int j = 0; j < m; j++) {
-            pfx[j + 1] = pfx[j] + a[i][j];
-        }
-
-        dpl = ndpl, dpr = ndpr;
-    }
-
-    int ans = -INF;
-    for (int i = 0; i < m; i++) {
-        ans = max({ans, dpl[i], dpr[i]});
-    }
-
-    cout << ans << '\n';
-}
+const int MAX_S = 1e9;
+const ld error = 1e-9;
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int t;
-    cin >> t;
+    int s;
+    cin >> s;
 
-    while (t--) {
-        solve();
+    ld l = 1, r = sqrt(2 * s) + 1;
+    while (r - l > error) {
+        ld cur = (l + r) / 2;
+        int count{};
+
+        for (int i = 1; i < cur; i++) {
+            int y = sqrt(cur * cur - i * i);
+            count += y;
+        }
+
+        count *= 4;
+
+        if (count >= s + 1) {
+            r = cur;
+        }
+        else {
+            l = cur;
+        }
     }
+
+    ld ans = l;
+    cout << fixed << setprecision(15) << ans << '\n';
 }

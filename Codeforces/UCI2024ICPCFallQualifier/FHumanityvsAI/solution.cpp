@@ -19,31 +19,61 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int INF = 1e12;
+bool ask(int a, int b) {
+    cout << "? " << a << ' ' << b << endl;
+    string resp;
+    cin >> resp;
+
+    return resp == "human";
+}
+
+void ans(vector<int>& h) {
+    cout << "!";
+    for (int& x : h) {
+        cout << ' ' << x;
+    }
+    cout << endl;
+}
+
+mt19937 mt(time(nullptr));
 
 void solve() {
-    int n, m;
-    cin >> n >> m;
+    int n;
+    cin >> n;
 
-    vector<vector<int>> a(n, vector<int>(m));
-    vector<int> dpl(m), dpr(m);
-    for (auto& x : a) for (auto& y : x) cin >> y;
+    int human = -1;
+    while (human == -1) {
+        int cand = mt() % (2 * n + 1) + 1;
 
-    for (int i = 0; i < n; i++) {
-        vector<int> ndpl(m), ndpr(m), pfx(m + 1);
-        for (int j = 0; j < m; j++) {
-            pfx[j + 1] = pfx[j] + a[i][j];
+        int good{}, bad{};
+        for (int i = 1; i <= 2 * n + 1; i++) {
+            bool x = ask(i, cand);
+            if (x) {
+                good++;
+            }
+            else {
+                bad++;
+            }
+
+            if (good > n) {
+                human = cand;
+                break;
+            }
+            else if (bad > n) {
+                break;
+            }
         }
-
-        dpl = ndpl, dpr = ndpr;
     }
 
-    int ans = -INF;
-    for (int i = 0; i < m; i++) {
-        ans = max({ans, dpl[i], dpr[i]});
+    vector<int> ppl;
+    ppl.reserve(n + 1);
+    for (int i = 1; i <= 2 * n + 1; i++) {
+        if (ask(human, i)) {
+            ppl.push_back(i);
+        }
     }
 
-    cout << ans << '\n';
+    ans(ppl);
 }
 
 uci main() {

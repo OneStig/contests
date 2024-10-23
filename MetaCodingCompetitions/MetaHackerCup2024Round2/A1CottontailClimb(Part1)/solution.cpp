@@ -19,28 +19,17 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int INF = 1e12;
+vector<int> nums;
 
 void solve() {
-    int n, m;
-    cin >> n >> m;
+    int a, b, m;
+    cin >> a >> b >> m;
 
-    vector<vector<int>> a(n, vector<int>(m));
-    vector<int> dpl(m), dpr(m);
-    for (auto& x : a) for (auto& y : x) cin >> y;
-
-    for (int i = 0; i < n; i++) {
-        vector<int> ndpl(m), ndpr(m), pfx(m + 1);
-        for (int j = 0; j < m; j++) {
-            pfx[j + 1] = pfx[j] + a[i][j];
+    int ans{};
+    for (int& x : nums) {
+        if (x % m == 0 && x >= a && x <= b) {
+            ans++;
         }
-
-        dpl = ndpl, dpr = ndpr;
-    }
-
-    int ans = -INF;
-    for (int i = 0; i < m; i++) {
-        ans = max({ans, dpl[i], dpr[i]});
     }
 
     cout << ans << '\n';
@@ -49,10 +38,23 @@ void solve() {
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
+    string cmp = "123456789";
+
+    for (int len = 1; len <= 9; len++) {
+        for (int i = 0; i + len <= 9; i++) {
+            string f = cmp.substr(i, len);
+            string b = cmp.substr(i, len - 1);
+            reverse(all(b));
+            int cur = stoll(f + b);
+            nums.push_back(cur);
+        }
+    }
+
     int t;
     cin >> t;
 
-    while (t--) {
+    for (int i = 1; i <= t; i++) {
+        cout << "Case #" << i << ": ";
         solve();
     }
 }

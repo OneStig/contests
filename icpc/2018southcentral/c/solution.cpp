@@ -19,31 +19,47 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-const int INF = 1e12;
-
 void solve() {
-    int n, m;
-    cin >> n >> m;
+    string a, b;
+    cin >> a >> b;
+    int n = sz(a);
 
-    vector<vector<int>> a(n, vector<int>(m));
-    vector<int> dpl(m), dpr(m);
-    for (auto& x : a) for (auto& y : x) cin >> y;
+    set<array<uci, 26>> bs;
 
     for (int i = 0; i < n; i++) {
-        vector<int> ndpl(m), ndpr(m), pfx(m + 1);
-        for (int j = 0; j < m; j++) {
-            pfx[j + 1] = pfx[j] + a[i][j];
+        array<uci, 26> cur;
+        for (int k = 0; k < 26; k++) {
+            cur[k] = 0;
         }
 
-        dpl = ndpl, dpr = ndpr;
+        for (int j = i; j < n; j++) {
+            cur[b[j] - 'a']++;
+            bs.insert(cur);
+        }
     }
 
-    int ans = -INF;
-    for (int i = 0; i < m; i++) {
-        ans = max({ans, dpl[i], dpr[i]});
+    int ans{};
+    int b1 = -1;
+    for (int i = 0; i < n; i++) {
+        array<uci, 26> cur;
+        for (int k = 0; k < 26; k++) {
+            cur[k] = 0;
+        }
+        for (int j = i; j < n; j++) {
+            cur[a[j] - 'a']++;
+            if (bs.contains(cur) && j - i + 1 > ans) {
+                ans = j - i + 1;
+                b1 = i;
+            }
+        }
     }
 
-    cout << ans << '\n';
+    if (ans == 0) {
+        cout << "NONE\n";
+    }
+    else {
+        cout << a.substr(b1, ans) << '\n';
+    }
 }
 
 uci main() {
