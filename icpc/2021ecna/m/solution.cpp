@@ -23,7 +23,8 @@ int m, n, k;
 const int INF = 1e9;
 
 uci main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    cin.tie(0)->sync_with_stdio(0);
+    cin.exceptions(cin.failbit);
 
     cin >> m >> n >> k;
     vector<vector<char>> g(m, vector<char>(n));
