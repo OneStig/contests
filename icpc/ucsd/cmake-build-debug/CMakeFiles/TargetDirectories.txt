@@ -1,0 +1,3 @@
+/Users/steven/contests/icpc/ucsd/cmake-build-debug/CMakeFiles/ucsd.dir
+/Users/steven/contests/icpc/ucsd/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/steven/contests/icpc/ucsd/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,3 @@
+/Users/steven/contests/icpc/2024rmc/cmake-build-debug/CMakeFiles/2024rmc.dir
+/Users/steven/contests/icpc/2024rmc/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/steven/contests/icpc/2024rmc/cmake-build-debug/CMakeFiles/rebuild_cache.dir
