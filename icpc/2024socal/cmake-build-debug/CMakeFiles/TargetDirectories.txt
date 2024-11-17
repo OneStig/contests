@@ -1,0 +1,3 @@
+/home/cgroup/icpc133/Downloads/cmake-build-debug/CMakeFiles/Downloads.dir
+/home/cgroup/icpc133/Downloads/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/cgroup/icpc133/Downloads/cmake-build-debug/CMakeFiles/rebuild_cache.dir
