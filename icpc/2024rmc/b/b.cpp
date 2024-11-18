@@ -9,114 +9,99 @@ typedef int uci;
 
 uci main() {
 	cin.tie(0)->sync_with_stdio(0);
-	cin.exceptions(cin.failbit);
-
 	int n;
 	cin >> n;
-	vector<int> a(n);
-	for(int i = 0; i < n; ++i) {
-		cin >> a[i];
+	vector<int> a(n / 2), b((n + 1) / 2);
+
+	for (int& x : a) cin >> x;
+	for (int& x : b) cin >> x;
+
+	int found = -1;
+	unordered_set<int> seenSums;
+	vector<int> as, bs;
+	as.reserve(1ll << sz(a));
+	bs.reserve(1ll << sz(b));
+
+	for (int mask = 1; mask < (1ll << sz(a)); mask++) {
+		int curSum = 0;
+		for (int i = 0; i < sz(a); i++) {
+			if (mask & (1ll << i)) {
+				curSum += a[i];
+			}
+		}
+
+		if (seenSums.find(curSum) != seenSums.end()) {
+			found = curSum;
+			break;
+		}
+
+		seenSums.insert(curSum);
+		as.push_back(curSum);
 	}
 
-	random_device rd;
-
-	int cnt = 0;
-	while(true) {
-		cnt++;
-		mt19937 g(rd());
-		shuffle(a.begin(), a.end(),  g);
-
-		vector<int> first_half, second_half;
-		for(int i = 0; i < n / 2; ++i) {
-			first_half.push_back(a[i]);
-		}
-
-
-		for(int i = n / 2; i < n; ++i) {
-			second_half.push_back(a[i]);
-		}
-
-		int n1 = first_half.size();
-		set<int> combinations_1;
-		for(int bit = 0; bit < (1 << n1) - 1; ++bit) {
-			int sum = 0;
-			int one = 1;
-			for(int i = 0; i < n1; ++i) {
-				if(bit & (one << i)) {
-					sum += first_half[i];
-				}
-			}
-
-			combinations_1.insert(sum);
-		}
-
-
-		int n2 = sz(second_half);
-		set<int> combinations_2;
-		for(int bit = 0; bit < (1 << n2); ++bit) {
-			int sum = 0;
-			int one = 1;
-			for(int i = 0; i < n1; ++i) {
-				if(bit & (one << i)) {
-					sum += second_half[i];
-				}
-			}
-
-
-			combinations_2.insert(sum);
-		}
-
-		for(auto x : combinations_1) {
-			if(x != 0 && combinations_2.find(x) != combinations_2.end()) {
-				cout << x << "\n";
-				return 0;
+	for (int mask = 1; mask < (1ll << sz(b)); mask++) {
+		int curSum = 0;
+		for (int i = 0; i < sz(b); i++) {
+			if (mask & (1ll << i)) {
+				curSum += b[i];
 			}
 		}
 
-		first_half.clear(), second_half.clear();
-		for(int i = 0; i < n / 2 - 1; ++i) {
-			first_half.push_back(a[i]);
+		if (seenSums.find(curSum) != seenSums.end()) {
+			found = curSum;
+			break;
 		}
 
 
-		for(int i = n / 2; i < n; ++i) {
-			second_half.push_back(a[i]);
+		if (seenSums.find(curSum) != seenSums.end()) {
+			found = curSum;
+			break;
 		}
 
-		n1 = first_half.size();
-		combinations_1.clear();
-		for(int bit = 0; bit < (1 << n1) - 1; ++bit) {
-			int sum = 0;
-			int one = 1;
-			for(int i = 0; i < n1; ++i) {
-				if(bit & (one << i)) {
-					sum += first_half[i];
-				}
+		seenSums.insert(curSum);
+		bs.push_back(curSum);
+	}
+
+	as.push_back(0);
+	sort(all(as));
+	sort(all(bs));
+
+	if (found != -1) {
+		cout << found << '\n';
+		return 0;
+	}
+
+	// binary search on range to find answer
+	int inleft = 0;
+	int l = 1, r = (1ll << n) - 2;
+	while (l != r) {
+		int mid = (l + r) / 2;
+		// count for range [l, mid] if not extra then (mid, r]
+		int count = 0;
+		int bi = sz(bs) - 1;
+		for (int ai = 0; ai < sz(as); ai++) {
+			while (bi >= 0 && as[ai] + bs[bi] > mid) {
+				bi--;
 			}
 
-			combinations_1.insert(sum);
-		}
-
-		n2 = sz(second_half);
-		combinations_2.clear();
-		for(int bit = 0; bit < (1 << n2); ++bit) {
-			int sum = 0;
-			int one = 1;
-			for(int i = 0; i < n1; ++i) {
-				if(bit & (one << i)) {
-					sum += second_half[i];
-				}
+			count += bi + 1;
+			if (ai != 0 && as[ai] <= mid) {
+				count++;
 			}
 
-
-			combinations_2.insert(sum);
+			if (as[ai] > mid) break;
 		}
 
-		for(auto x : combinations_1) {
-			if(x != 0 && combinations_2.find(x) != combinations_2.end()) {
-				cout << x << "\n";
-				return 0;
-			}
+		count -= inleft;
+
+		if (count > mid - l + 1) {
+			r = mid;
+		}
+		else {
+			l = mid + 1;
+			inleft += count;
 		}
 	}
+
+	cout << l << '\n';
 }
