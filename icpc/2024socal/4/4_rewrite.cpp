@@ -88,10 +88,15 @@ uci main() {
     string curline;
 
     while (getline(cin, curline)) {
-        stringstream ss(curline);
+        string cline = "";
 
-        char optype;
-        ss >> optype;
+        for (int i = 1; i < sz(curline)) {
+            if (!isspace(curline[i])) {
+                cline += curline[i];
+            }
+        }
+
+        char optype = curline[0];
 
         if (optype == 'G') break;
 
@@ -100,6 +105,7 @@ uci main() {
             char sign = 0;
             ld a, o = 0;
             string name1, name2;
+
             ss >> name1 >> name2 >> a >> name2;
 
             if (ss >> sign) {
