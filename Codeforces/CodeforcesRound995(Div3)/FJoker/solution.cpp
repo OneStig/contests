@@ -19,47 +19,48 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
-uci main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
+void solve() {
     int n, m, q;
     cin >> n >> m >> q;
-    
-    vector<int> a(n), b(m);
-    set<int> ina, inb;
-    int asum = 0, bsum = 0;
-    for (int& x : a) {
-        cin >> x;
-        ina.insert(x);
-        asum += x;
-    }
 
-    for (int& x : b)  {
-        cin >> x;
-        inb.insert(x);
-        bsum += x;
-    }
-
-    // int beauty = asum + bsum;
+    set<int> jok = {m};
+    set<int> rf, lf;
+    if (m != 1) lf.insert(m);
+    if (m != n) rf.insert(m);
 
     while (q--) {
-        int targ;
-        cin >> targ;
-    
-        bool yes = 0;
-        int srt = sqrt(abs(targ));
-        for (int f = -srt; f <= srt; f++) {
-            if (f == 0) continue;
-            if (targ % f == 0) {
-                int ff = targ / f;
-            
-                if ((ina.count(asum - f) && inb.count(bsum - ff)) || (ina.count(asum - ff) && inb.count(bsum - f))) {
-                    yes = 1;
-                    break;
-                }
+        int a;
+        cin >> a;
+
+        if (jok.count(a)) {
+            jok.erase(a);
+            jok.insert(1);
+            jok.insert(n);
+        
+            if (!jok.count(2)) {
+                rf.insert(1);
+            }
+
+            if (!jok.count(n - 1)) {
+                lf.insert(1);
             }
         }
 
-        cout << (yes ? "YES" : "NO") << '\n';
+        lf = nxtL;
+        rf = nxtR;
+        cout << sz(jok) << ' ';
+    }
+
+    cout << '\n';
+}
+
+uci main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        solve();
     }
 }

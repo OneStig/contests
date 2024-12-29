@@ -22,25 +22,21 @@ uci main() {
 
     int t;
     cin >> t;
-    
+
     while (t--) {
-        int n, m;
-        cin >> n >> m;
-
-        vector<int> a(n), b(n);
+        int n;
+        cin >> n;
+        vector<int> a(n);
         for (int& x : a) cin >> x;
-        for (int& x : b) cin >> x;
 
-        vector<int> dpa(n + 1), dpb(n + 1);
-        for (int i = n - 1; i >= 0; i--) {
-            dpa[i] = a[i] + min(dpa[i + 1], dpb[i + 1]);
-            dpb[i] = b[i] += min(dpa[i + 1], dpb[i + 1]);
+        bool good = 0;
+        for (int i = 1; i < n; i++) {
+            if (abs(a[i] - a[i - 1]) < min(a[i], a[i - 1])) {
+                good = 1;
+                break;
+            }
         }
 
-        int ans = 1e15;
-        for (int i = 0; i < m; i++) {
-            ans = min(ans, dpa[i]);
-        }
-        cout << ans << '\n';
+        cout << (good ? "YES" : "NO") << '\n';
     }
 }

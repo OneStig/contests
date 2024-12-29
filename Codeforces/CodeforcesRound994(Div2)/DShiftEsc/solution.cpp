@@ -18,48 +18,48 @@ typedef int uci;
 #define ld long double
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
+#define ve vector
+
+const int INF = 1e15;
+
+void solve() {
+    int n, m, k;
+    cin >> n >> m >> k;
+    ve<ve<int>> a(n, ve<int>(m));
+    for (auto& x : a) for (auto& y : x) cin >> y;
+
+    // ve<ve<ve<int>>> dp(n, ve<ve<int>>(m, ve<int>(m, INF)));
+
+    ve<int> dp(m, INF);
+    dp[0] = 0;
+
+    for (int i = 0; i < n; i++) {
+        ve<int> ndp(m, INF);
+        for (int r = 0; r < m; r++) {
+            ve<int> ldp(m);
+            for (int j = 0; j < m; j++) {
+                ldp[j] = dp[j] + k * r;
+                if (j != 0) {
+                    ldp[j] = min(ldp[j], ldp[j - 1]);
+                }
+                ldp[j] += a[i][(j + r) % m];
+                ndp[j] = min(ndp[j], ldp[j]);
+            }
+        }
+
+        dp = ndp;
+    }
+
+    cout << dp[m - 1] << '\n';
+}
 
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, q;
-    cin >> n >> m >> q;
-    
-    vector<int> a(n), b(m);
-    set<int> ina, inb;
-    int asum = 0, bsum = 0;
-    for (int& x : a) {
-        cin >> x;
-        ina.insert(x);
-        asum += x;
-    }
+    int t;
+    cin >> t;
 
-    for (int& x : b)  {
-        cin >> x;
-        inb.insert(x);
-        bsum += x;
-    }
-
-    // int beauty = asum + bsum;
-
-    while (q--) {
-        int targ;
-        cin >> targ;
-    
-        bool yes = 0;
-        int srt = sqrt(abs(targ));
-        for (int f = -srt; f <= srt; f++) {
-            if (f == 0) continue;
-            if (targ % f == 0) {
-                int ff = targ / f;
-            
-                if ((ina.count(asum - f) && inb.count(bsum - ff)) || (ina.count(asum - ff) && inb.count(bsum - f))) {
-                    yes = 1;
-                    break;
-                }
-            }
-        }
-
-        cout << (yes ? "YES" : "NO") << '\n';
+    while (t--) {
+        solve();
     }
 }

@@ -22,44 +22,35 @@ typedef int uci;
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, q;
-    cin >> n >> m >> q;
-    
-    vector<int> a(n), b(m);
-    set<int> ina, inb;
-    int asum = 0, bsum = 0;
-    for (int& x : a) {
-        cin >> x;
-        ina.insert(x);
-        asum += x;
-    }
+    int t;
+    cin >> t;
 
-    for (int& x : b)  {
-        cin >> x;
-        inb.insert(x);
-        bsum += x;
-    }
+    while (t--) {
+        int l, r, G;
+        cin >> l >> r >> G;
 
-    // int beauty = asum + bsum;
+        if (l % G != 0) {
+            l += G - (l % G);
+        }
 
-    while (q--) {
-        int targ;
-        cin >> targ;
-    
-        bool yes = 0;
-        int srt = sqrt(abs(targ));
-        for (int f = -srt; f <= srt; f++) {
-            if (f == 0) continue;
-            if (targ % f == 0) {
-                int ff = targ / f;
-            
-                if ((ina.count(asum - f) && inb.count(bsum - ff)) || (ina.count(asum - ff) && inb.count(bsum - f))) {
-                    yes = 1;
+        r -= r % G;
+
+        int A = -1, B = -1;
+        for (int gap = 0; gap <= (r - l) / G; gap++) {
+            for (int lshift = 0; lshift <= gap; lshift++) {
+                int rshift = gap - lshift;
+                int tl = l + lshift * G, tr = r - rshift * G;
+
+                if (gcd(tl, tr) == G) {
+                    A = tl;
+                    B = tr;
                     break;
                 }
             }
+
+            if (A != -1) break;
         }
 
-        cout << (yes ? "YES" : "NO") << '\n';
+        cout << A << ' ' << B << '\n';
     }
 }

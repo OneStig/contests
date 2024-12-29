@@ -17,30 +17,29 @@ typedef int uci;
 #define all(a) (a).begin(), (a).end()
 typedef pair<int, int> pii;
 
+pii recur(int r, int k) {
+    if (r < k) return {0, 0};
+    int m = (r + 1) / 2;
+    if (r % 2 == 0) {
+        auto [sum, child] = recur(m, k);
+        return {2 * sum + child * m, 2 * child};
+    }
+
+    auto [sum, child] = recur(m - 1, k);
+    return {2 * sum + child * m + m, 2 * child + 1};
+}
+
 uci main() {
     cin.tie(0)->sync_with_stdio(0);
 
     int t;
     cin >> t;
-    
+
     while (t--) {
-        int n, m;
-        cin >> n >> m;
+        int n, k;
+        cin >> n >> k;
 
-        vector<int> a(n), b(n);
-        for (int& x : a) cin >> x;
-        for (int& x : b) cin >> x;
-
-        vector<int> dpa(n + 1), dpb(n + 1);
-        for (int i = n - 1; i >= 0; i--) {
-            dpa[i] = a[i] + min(dpa[i + 1], dpb[i + 1]);
-            dpb[i] = b[i] += min(dpa[i + 1], dpb[i + 1]);
-        }
-
-        int ans = 1e15;
-        for (int i = 0; i < m; i++) {
-            ans = min(ans, dpa[i]);
-        }
+        auto [ans, _] = recur(n, k);
         cout << ans << '\n';
     }
 }

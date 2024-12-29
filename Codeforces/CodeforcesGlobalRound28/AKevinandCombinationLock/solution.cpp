@@ -19,47 +19,38 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+bool cand(int x) {
+    if (x % 33 == 0) {
+        return true;
+    }
+
+    string s = to_string(x);
+    for (int i = 0; i < sz(s) - 1; i++) {
+        if (s[i] == '3' && s[i + 1] == '3') {
+            string nxt = s.substr(0, i) + s.substr(i + 2, sz(s) - i - 2);
+            if (sz(nxt) == 0) {
+                return false;
+            }
+
+            if (cand(stoi(nxt))) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, q;
-    cin >> n >> m >> q;
-    
-    vector<int> a(n), b(m);
-    set<int> ina, inb;
-    int asum = 0, bsum = 0;
-    for (int& x : a) {
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int x;
         cin >> x;
-        ina.insert(x);
-        asum += x;
-    }
-
-    for (int& x : b)  {
-        cin >> x;
-        inb.insert(x);
-        bsum += x;
-    }
-
-    // int beauty = asum + bsum;
-
-    while (q--) {
-        int targ;
-        cin >> targ;
     
-        bool yes = 0;
-        int srt = sqrt(abs(targ));
-        for (int f = -srt; f <= srt; f++) {
-            if (f == 0) continue;
-            if (targ % f == 0) {
-                int ff = targ / f;
-            
-                if ((ina.count(asum - f) && inb.count(bsum - ff)) || (ina.count(asum - ff) && inb.count(bsum - f))) {
-                    yes = 1;
-                    break;
-                }
-            }
-        }
-
-        cout << (yes ? "YES" : "NO") << '\n';
+        cout << (cand(x) ? "YES" : "NO") << '\n';
     }
 }

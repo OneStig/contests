@@ -19,47 +19,45 @@ typedef int uci;
 #define sz(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
 
+typedef array<int, 5> Cell;
+
 uci main() {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, q;
-    cin >> n >> m >> q;
-    
-    vector<int> a(n), b(m);
-    set<int> ina, inb;
-    int asum = 0, bsum = 0;
-    for (int& x : a) {
-        cin >> x;
-        ina.insert(x);
-        asum += x;
-    }
-
-    for (int& x : b)  {
-        cin >> x;
-        inb.insert(x);
-        bsum += x;
-    }
-
-    // int beauty = asum + bsum;
-
-    while (q--) {
-        int targ;
-        cin >> targ;
-    
-        bool yes = 0;
-        int srt = sqrt(abs(targ));
-        for (int f = -srt; f <= srt; f++) {
-            if (f == 0) continue;
-            if (targ % f == 0) {
-                int ff = targ / f;
-            
-                if ((ina.count(asum - f) && inb.count(bsum - ff)) || (ina.count(asum - ff) && inb.count(bsum - f))) {
-                    yes = 1;
-                    break;
-                }
+    vector<Cell> keys, locks;
+    for (int i = 0; i < 500; i++) {
+        vector<string> cur(7);
+        for (string& s : cur) cin >> s;
+        Cell c = {-1, -1, -1, -1, -1};
+        
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 7; j++) {
+                c[i] += cur[j][i] == '#';
             }
         }
 
-        cout << (yes ? "YES" : "NO") << '\n';
+        if (cur[0][0] == '#') {
+            locks.push_back(c);
+        }
+        else {
+            keys.push_back(c);
+        }
     }
+
+    int ans = 0;
+    for (auto& k : keys) {
+        for (auto& l : locks) {
+            bool good = 1;
+            for (int i = 0; i < 5; i++) {
+                if (l[i] + k[i] > 5) {
+                    good = 0;
+                    break;
+                }
+            }
+
+            ans += good;
+        }
+    }
+
+    dbg(ans);
 }
