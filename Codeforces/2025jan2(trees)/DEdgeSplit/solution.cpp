@@ -44,6 +44,21 @@ void solve() {
 
     dfs(1, adj, vis, ans);
 
+
+    set<int> ext;
+
+    for (int i = 1; i < n; i++) {
+        for (auto& [_, edge] : adj[i]) {
+            if (vis[edge] == 0) {
+                ext.insert(i);
+            }
+        }
+    }
+
+    if (sz(ext) == 3) {
+
+    }
+
     for (bool x : ans) {
         cout << x;
     }
