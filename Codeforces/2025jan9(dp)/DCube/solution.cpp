@@ -10,7 +10,7 @@ using namespace std;
 #endif
 
 typedef int uci;
-// #define int long long
+#define int long long
 #define ld long double
 #define ve vector
 #define sz(x) ((int)x.size())
@@ -40,16 +40,28 @@ uci main() {
     fill(dp, dp + (1 << (2 * n)), INF);
     dp[0] = 0;
 
-    for (int mask = 1; mask < (1 << (2 * n)); mask++) {
-        for (int y = 0; y < n; y++) {
-            if (!(mask & (1 << y))) continue;
-            for (int z = 0; z < n; z++) {
-                if (!(mask & (1 << (n + z)))) continue;
+    for (int mask = 0; mask < (1 << (2 * n)) - 1; mask++) {
+        if (dp[mask] == INF) continue;
 
-                int prev = mask - (1 << y) - (1 << (n + z));
-                int x = __builtin_popcount(mask) / 2 - 1;
-                dp[mask] = min(dp[mask], dp[prev] + g[x][y][z]);
-            }
+        dbg(mask | cpp_dump::bin(2 * n, n), dp[mask]);
+
+        ve<int> ys, zs;
+        for (int y = 0; y < n; y++) {
+            if (!(mask & (1 << y))) ys.push_back(y);
+        }
+
+        for (int z = 0; z < n; z++) {
+            if (!(mask & (1 << (n + z)))) zs.push_back(z);
+        }
+
+        // assert(sz(ys) == sz(zs));
+
+        int x = n - sz(ys);
+
+        for (int y : ys) for (int z : zs) {
+            int nxt = mask + (1 << y) + (1 << (n + z));
+            dp[nxt] = min(dp[nxt], dp[mask] + g[x][y][z]);
+            dbg(dp[nxt], x, y, z, g[x][y][z]);
         }
     }
 
