@@ -22,6 +22,26 @@ typedef pair<int, int> pii;
 
 const int INF = 1e15;
 
+struct Tree {
+	typedef int T;
+	static constexpr T unit = INT_MIN;
+	T f(T a, T b) { return max(a, b); } // (any associative fn)
+	vector<T> s; int n;
+	Tree(int n = 0, T def = unit) : s(2*n, def), n(n) {}
+	void update(int pos, T val) {
+		for (s[pos += n] = val; pos /= 2;)
+			s[pos] = f(s[pos * 2], s[pos * 2 + 1]);
+	}
+	T query(int b, int e) { // query [b, e)
+		T ra = unit, rb = unit;
+		for (b += n, e += n; b < e; b /= 2, e /= 2) {
+			if (b % 2) ra = f(ra, s[b++]);
+			if (e % 2) rb = f(s[--e], rb);
+		}
+		return f(ra, rb);
+	}
+};
+
 bool comp(pii a, pii b) {
     if ((a.S - a.F > 0) == (b.S - b.F > 0)) {
         if (a.S - a.F <= 0) {
@@ -52,38 +72,12 @@ uci main() {
             bsum += a[i].S;
         }
 
-        int cand = -1;
+        sort(all(a));
+
         for (int i = 0; i < n; i++) {
             if (bsum - a[i].second >= asum) {
-                if (cand == -1 || comp(a[cand], a[i])) {
-                    cand = i;
-                }
             }
         }
 
-        if (cand == -1) {
-            cout << "-1\n";
-            continue;
-        }
-
-        pii tmp = a[cand];
-        a.erase(a.begin() + cand);
-        sort(all(a), comp);
-        a.push_back(tmp);
-
-        int ans = 0;
-
-        int free = 0;
-        for (int i = 0; i < n; i++) {
-            ans += a[i].F;
-            int mv = min(free, a[i].F);
-            free -= mv;
-            a[i].F -= mv;
-            a[n - 1].F += a[i].F;
-            free += a[i].S;
-
-        }
-
-        cout << ans << '\n';
     }
 }
