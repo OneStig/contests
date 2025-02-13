@@ -29,6 +29,8 @@ uci main() {
     for (int i = 0; i < 60; i++) {
         int cy = 1;
         for (int j = 0; j < 60; j++) {
+            if (cx + cy > r) break;
+
             bad.insert(cx + cy);
 
             if (cy < (r + y - 1) / y) {
@@ -47,9 +49,10 @@ uci main() {
         }
     }
 
+
     ve<int> nums(all(bad));
 
-    int gap = max(0ll, r - nums.back());
+    int gap = max(0ll, r - max((sz(nums) ? nums.back() : -1), l - 1));
 
     for (int i = 1; i < sz(nums); i++) {
         int bot = max(nums[i - 1], l - 1);
