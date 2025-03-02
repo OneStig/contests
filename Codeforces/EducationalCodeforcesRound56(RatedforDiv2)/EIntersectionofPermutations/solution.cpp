@@ -17,30 +17,6 @@ typedef int uci;
 #define all(a) (a).begin(), (a).end()
 typedef pair<int, int> pii;
 
-#define X first
-#define Y second
-
-int DX[] = {-1, 1, -1, 1}, DY[] = {-1, -1, 1, 1};
-
-// walls are top, right, bottom, left
-
-pii wall(pii pos, pii delta) {
-    return {0, 0};
-}
-
-
 uci main() {
     cin.tie(0)->sync_with_stdio(0);
-
-    int w, h, cx, cy, n;
-    while (1) {
-        cin >> w >> h >> cx >> cy >> n;
-        if (w == 0) break;
-
-        ve<pii> balls(n);
-        for (auto& b : balls) {
-            cin >> b.X >> b.Y;
-        }
-
-    }
 }

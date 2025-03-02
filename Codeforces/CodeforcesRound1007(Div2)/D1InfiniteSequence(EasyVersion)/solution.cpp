@@ -17,30 +17,35 @@ typedef int uci;
 #define all(a) (a).begin(), (a).end()
 typedef pair<int, int> pii;
 
-#define X first
-#define Y second
+void solve() {
+    int n, l, r;
+    cin >> n >> l >> r;
 
-int DX[] = {-1, 1, -1, 1}, DY[] = {-1, -1, 1, 1};
+    ve<int> a(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
 
-// walls are top, right, bottom, left
+    assert(l == r); // subproblem d1
 
-pii wall(pii pos, pii delta) {
-    return {0, 0};
+    if (l <= n) {
+        cout << a[l] << '\n';
+        return;
+    }
+
+    int ans = 0;
+
+
+    cout << ans << '\n';
 }
-
 
 uci main() {
     cin.tie(0)->sync_with_stdio(0);
 
-    int w, h, cx, cy, n;
-    while (1) {
-        cin >> w >> h >> cx >> cy >> n;
-        if (w == 0) break;
+    int t;
+    cin >> t;
 
-        ve<pii> balls(n);
-        for (auto& b : balls) {
-            cin >> b.X >> b.Y;
-        }
-
+    while (t--) {
+        solve();
     }
 }
